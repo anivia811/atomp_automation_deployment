@@ -1,0 +1,22 @@
+*.pem
+docker_images/*
+build_image/*
+
+# MySQL / data volumes
+**/mysql-volume/
+app_data/
+atomp-bundle/
+atomp-bundle.tar.gz
+tester40-client.tar.gz
+atomp-fixes/
+
+# OS junk
+.DS_Store
+._*
+
+# Logs
+*.log
+backup_db/backupdb.log
+
+# Node
+node_modules/

@@ -88,6 +88,10 @@ APP_WEBSOCKET_PORT_LIST["studio-web"]=33350
 # External service URL
 ATOM_ID_URL="http://10.42.0.184/atomid"
 DEVICE_FARM_URL="http://10.42.0.184:3700"
+# DeviceFarm STF frontend host (serves /static/app/devices/* icons). The :3700 API
+# host serves NO static assets, so studio-client device thumbnails must load from
+# the STF frontend (:81), NOT the API port. Used only by studio-client (ATOM_FARM).
+DEVICE_FARM_STF_URL="http://10.42.0.184:81"
 DEVICE_FARM_API_AUTH_KEY="studio-web-1782885942"
 AI_SERVER_URL="http://localhost:1337"
 BAMBOO_AUTOEVER_AUTHKEY=""
@@ -359,7 +363,7 @@ STUDIO_CLIENT_TMP_FOLDER=$STUDIO_WEBSERVER_TMP_FOLDER # DO NOT edit
 
 # - ENV config
 declare -A STUDIO_CLIENT_ENV_CONFIG
-STUDIO_CLIENT_ENV_CONFIG["device-farm-url"]=$DEVICE_FARM_URL # DO NOT edit
+STUDIO_CLIENT_ENV_CONFIG["device-farm-url"]=$DEVICE_FARM_STF_URL # STF frontend (:81) for device icons, NOT API :3700
 STUDIO_CLIENT_ENV_CONFIG["socket-server-url"]=$STUDIO_WEBSERVER_PUBLIC_SOCKET_URL
 STUDIO_CLIENT_ENV_CONFIG["server-url"]=$STUDIO_WEBSERVER_PUBLIC_URL
 STUDIO_CLIENT_ENV_CONFIG["path-public-url"]=""

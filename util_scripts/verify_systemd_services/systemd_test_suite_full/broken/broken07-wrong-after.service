@@ -1,0 +1,14 @@
+[Unit]
+Description=Wrong After Value
+Wants=network-online.target
+After=multi-user.target       # WRONG; should include network-online + NM wait
+StartLimitIntervalSec=0
+
+[Service]
+User=root
+ExecStart=/bin/true
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

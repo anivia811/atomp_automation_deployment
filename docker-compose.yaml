@@ -1,0 +1,347 @@
+networks:
+  atomp:
+    driver: bridge
+  atomp-shared:
+    external: true
+
+services:
+  atomid-mysql:
+    image: mysql:8.0.34
+    container_name: atomid-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ATOMID_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: atomid
+      MYSQL_USER: ${ATOMID_MYSQL_USER}
+      MYSQL_PASSWORD: ${ATOMID_MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - ./atomp_automation_deployment/ATOMID_Deployment/mysql-volume:/var/lib/mysql
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/atomid.sql:/source/atompid.sql
+    networks:
+      - atomp
+
+  atomid-redis:
+    image: redis:8.6.1
+    container_name: atomid-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - atomp
+
+  atomid:
+    image: atomid/web:latest
+    container_name: atomid
+    ports:
+      - "8081:8081"
+    restart: on-failure
+    depends_on:
+      atomid-mysql:
+        condition: service_healthy
+      atomid-redis:
+        condition: service_started
+    environment:
+      ATOMID_LINK_DEVICE_FARM: /devicefarm/
+      ATOMID_LINK_TESTER40: /tester40/
+      NODE_OPTIONS: --openssl-legacy-provider
+      NODE_ENV: production
+      ATOMID_MYSQL_HOST: atomid-mysql
+      ATOMID_MYSQL_DB_NAME: atomid
+      ATOMID_MYSQL_USER: atomp
+      ATOMID_MYSQL_PASSWORD: atomp@12345
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:8081/ -o /dev/null -w '%{http_code}' | grep -qE '^[23]'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - ./config/atomid/server.json:/app/config/environments/production/server.json
+      - ./config/atomid/database.json:/app/config/environments/production/database.json
+      - ./config/atomid/database.json.template:/app/config/environments/production/database.json.template
+      - ./config/atomid/main.313a0f7430e344a7a425.js:/app/public/main.313a0f7430e344a7a425.js:ro
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/client-privatekey.pem:/config/client-privatekey.pem
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/client-publickey.pem:/config/client-publickey.pem
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/service-privatekey.pem:/config/service-privatekey.pem
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/service-publickey.pem:/config/service-publickey.pem
+    networks:
+      - atomp
+      - atomp-shared
+
+  atomid-api:
+    build:
+      context: ./atom-id-web
+    container_name: atomid-api
+    depends_on:
+      atomid-mysql:
+        condition: service_healthy
+      atomid-redis:
+        condition: service_started
+    environment:
+      NODE_ENV: production
+      ATOMID_MYSQL_HOST: ${ATOMID_MYSQL_HOST:-atomid-mysql}
+      ATOMID_MYSQL_DB_NAME: ${ATOMID_MYSQL_DB_NAME:-atomid}
+      ATOMID_MYSQL_USER: ${ATOMID_MYSQL_USER}
+      ATOMID_MYSQL_PASSWORD: ${ATOMID_MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - ./config/atomid/server.json:/app/config/environments/production/server.json
+      - ./config/atomid/database.json.template:/app/config/environments/production/database.json.template
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/client-privatekey.pem:/config/client-privatekey.pem
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/client-publickey.pem:/config/client-publickey.pem
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/service-privatekey.pem:/config/service-privatekey.pem
+      - ./atomp_automation_deployment/ATOMID_Deployment/script/deploy/appenv/service-publickey.pem:/config/service-publickey.pem
+    networks:
+      - atomp
+
+  mysql-auto:
+    image: mysql:8.0.43
+    container_name: mysql-auto
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_AUTO_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: "%"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - ./atomp_automation_deployment/app_data/mysql/mysql-volume:/var/lib/mysql
+    networks:
+      - atomp
+
+  redis-auto:
+    image: redis:8.2.2
+    container_name: redis-auto
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - atomp
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8090:80"
+    volumes:
+      - ./atomp_automation_deployment/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      atomid:
+        condition: service_started
+      atomid-api:
+        condition: service_started
+      tester40-web:
+        condition: service_started
+      studio-web:
+        condition: service_started
+      tasker-web:
+        condition: service_started
+      storage-web:
+        condition: service_started
+    networks:
+      - atomp
+
+  tester40-web:
+    image: tester40/web:b-20260625-214747
+    container_name: tester40-web
+    ports:
+      - "33000:3000"
+      - "33030:3030"
+    depends_on:
+      mysql-auto:
+        condition: service_healthy
+      redis-auto:
+        condition: service_started
+    environment:
+      TESTER40_MSQL_HOST: ${TESTER40_MSQL_HOST}
+      TESTER40_MSQL_PORT: ${TESTER40_MSQL_PORT}
+      TESTER40_MSQL_DB_NAME: ${TESTER40_MSQL_DB_NAME}
+      TESTER40_MSQL_USERNAME: ${TESTER40_MSQL_USERNAME}
+      TESTER40_MSQL_PASSWORD: ${TESTER40_MSQL_PASSWORD}
+      TESTER40_REDIS_HOST: ${TESTER40_REDIS_HOST}
+      TESTER40_REDIS_PORT: ${TESTER40_REDIS_PORT}
+      TESTER40_ATOMID_HOST: ${TESTER40_ATOMID_HOST}
+      TESTER40_AI_HOST: ${TESTER40_AI_HOST}
+      TESTER40_TASKER_HOST: ${TESTER40_TASKER_HOST}
+      TESTER40_STUDIO_API_HOST: ${TESTER40_STUDIO_API_HOST}
+      TESTER40_STORAGE_API_HOST_FULL_PATH: ${TESTER40_STORAGE_API_HOST_FULL_PATH}
+      TESTER40_STORAGE_API_HOST_INTERNAL_PATH: ${TESTER40_STORAGE_API_HOST_INTERNAL_PATH}
+      TESTER40_DEVICEFARM_HOST: http://10.42.0.245:3700
+      TESTER40_DEVICEFARM_AUTHKEY: 94b45a6ca571478b8cb4582c1a3281ae2356120b20114633b30f41a1eacf2e38
+      TESTER40_PUBLIC_HOST: http://10.42.0.245/tester40
+      TESTER40_SERVICE_TOKEN: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiVGVzdGVyNDAiLCJhbGxvd19zZXJ2aWNlIjpbIkRGIiwiVGFza2VyIiwiQVRPTUlEIiwiU3RvcmFnZSIsIlN0dWRpbyJdfSwiaWF0IjoxNTk2MDkyNTM1fQ.YmzjH_vl-oWdeeqB-L5U7XuqDkdcbmCF4zNZ6JonAy0AYwNitT1Huk9O0V79t6-YyULsJSlkcOadELWJl-S_UEjDWRDJg61DM59oe6qZfjVJfihpnVA_IYcQUsaze6CIVEu9IhXqhIinDFBfXCNjyYZiJiSM3_rnbXdAYVTnI0s
+      TESTER40_COOKIE_HTTP_ONLY: ${TESTER40_COOKIE_HTTP_ONLY}
+      TESTER40_COOKIE_SECURE: ${TESTER40_COOKIE_SECURE}
+      TESTER40_COOKIE_SAME_SITE: ${TESTER40_COOKIE_SAME_SITE}
+    volumes:
+      - ./atomp_automation_deployment/app_data/tester40_webserver/uploads:/app/public/uploads
+      - ./atomp_automation_deployment/app_data/tester40_webserver/data:/app/data
+      - ./atomp_automation_deployment/app_data/tester40_webserver/tmp:/app/tmp
+      - ./atomp_automation_deployment/build_image/setup_data_folder/tester40-web/authkey/client-publickey.pem:/certs/client-publickey.pem:ro
+      - ./config/tester40-web-auth.controller.js:/usr/src/app/app/api/auth/auth.controller.js:ro
+    networks:
+      - atomp
+
+  tester40-client:
+    image: tester40/client:b-20260625-214747
+    container_name: tester40-client
+    ports:
+      - "34100:3000"
+    depends_on:
+      tester40-web:
+        condition: service_started
+    environment:
+      TESTER40_CLIENT_SERVER_URL: http://10.42.0.245
+      TESTER40_CLIENT_URL: http://10.42.0.245/tester40
+      TESTER40_CLIENT_SOCKET_URL: http://10.42.0.245
+      TESTER40_CLIENT_ATOMID_URL: http://10.42.0.245/atomid
+      TESTER40_CLIENT_STORAGE_API_HOST_FULL_PATH: http://10.42.0.245/storage/upload/application
+      TESTER40_CLIENT_PATH_PUBLIC_URL: /tester40/
+      TESTER40_CLIENT_STUDIO_CLIENT_URL: http://10.42.0.245/studio
+      TESTER40_CLIENT_STUDIO_SERVER_URL: http://10.42.0.245
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+    networks:
+      - atomp
+
+  studio-web:
+    image: studio/web:b-20260625-214747
+    container_name: studio-web
+    ports:
+      - "33300:3000"
+      - "33350:3030"
+    depends_on:
+      mysql-auto:
+        condition: service_healthy
+      redis-auto:
+        condition: service_started
+    environment:
+      STUDIO_MSQL_HOST: ${STUDIO_MSQL_HOST}
+      STUDIO_MSQL_PORT: ${STUDIO_MSQL_PORT}
+      STUDIO_MSQL_DB_NAME: ${STUDIO_MSQL_DB_NAME}
+      STUDIO_MSQL_USERNAME: ${STUDIO_MSQL_USERNAME}
+      STUDIO_MSQL_PASSWORD: ${STUDIO_MSQL_PASSWORD}
+      STUDIO_REDIS_HOST: ${STUDIO_REDIS_HOST}
+      STUDIO_REDIS_PORT: ${STUDIO_REDIS_PORT}
+      STUDIO_ATOMID_HOST: ${STUDIO_ATOMID_HOST}
+      STUDIO_AI_HOST: ${STUDIO_AI_HOST}
+      STUDIO_TESTER40_HOST: ${STUDIO_TESTER40_HOST}
+      STUDIO_STORAGE_API_HOST_FULL_PATH: ${STUDIO_STORAGE_API_HOST_FULL_PATH}
+      STUDIO_PUBLIC_HOST: ${STUDIO_PUBLIC_HOST}
+      STUDIO_SERVICE_TOKEN: ${STUDIO_SERVICE_TOKEN}
+      STUDIO_DEVICEFARM_HOST: ${STUDIO_DEVICEFARM_HOST}
+      STUDIO_DEVICEFARM_AUTHKEY: ${STUDIO_DEVICEFARM_AUTHKEY}
+    volumes:
+      - ./atomp_automation_deployment/app_data/studio_webserver/tmp:/app/tmp
+    networks:
+      - atomp
+
+  studio-client:
+    image: studio/client:b-20260625-214747
+    container_name: studio-client
+    ports:
+      - "34200:3000"
+    depends_on:
+      studio-web:
+        condition: service_started
+    environment:
+      STUDIO_CLIENT_DEVICEFARM_HOST: http://10.42.0.245:3100
+      STUDIO_CLIENT_SOCKET_ENDPOINT: ws://10.42.0.245/studio/socket
+      STUDIO_CLIENT_SERVER_HOST: http://10.42.0.245
+      STUDIO_CLIENT_PATH_PUBLIC_URL: /studio/
+    volumes:
+      - ./atomp_automation_deployment/app_data/studio_webserver/tmp:/app/tmp
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+    networks:
+      - atomp
+
+  tasker-web:
+    image: tasker/web:b-20260625-214747
+    container_name: tasker-web
+    ports:
+      - "33100:3000"
+    depends_on:
+      mysql-auto:
+        condition: service_healthy
+    environment:
+      TASKER_MSQL_HOST: ${TASKER_MSQL_HOST}
+      TASKER_MSQL_PORT: ${TASKER_MSQL_PORT}
+      TASKER_MSQL_DB_NAME: ${TASKER_MSQL_DB_NAME}
+      TASKER_MSQL_USERNAME: ${TASKER_MSQL_USERNAME}
+      TASKER_MSQL_PASSWORD: ${TASKER_MSQL_PASSWORD}
+      TASKER_AI_HOST: ${TASKER_AI_HOST}
+      TASKER_TESTER40_HOST: ${TASKER_TESTER40_HOST}
+      TASKER_STORAGE_API_HOST_FULL_PATH: ${TASKER_STORAGE_API_HOST_FULL_PATH}
+      TASKER_DEVICEFARM_HOST: ${TASKER_DEVICEFARM_HOST}
+      TASKER_DEVICEFARM_AUTHKEY: ${TASKER_DEVICEFARM_AUTHKEY}
+      TASKER_SERVICE_TOKEN: ${TASKER_SERVICE_TOKEN}
+    volumes:
+      - ./atomp_automation_deployment/app_data/tasker_webserver/uploads:/app/public/uploads
+      - ./atomp_automation_deployment/app_data/tasker_webserver/data:/app/data
+      - ./atomp_automation_deployment/app_data/tasker_webserver/tmp:/app/tmp
+    networks:
+      - atomp
+
+  storage-web:
+    image: storage/web:b-20260625-214747
+    container_name: storage-web
+    ports:
+      - "6800:3000"
+    depends_on:
+      mysql-auto:
+        condition: service_healthy
+    environment:
+      STORAGE_MSQL_HOST: ${STORAGE_MSQL_HOST}
+      STORAGE_MSQL_PORT: ${STORAGE_MSQL_PORT}
+      STORAGE_MSQL_DB_NAME: ${STORAGE_MSQL_DB_NAME}
+      STORAGE_MSQL_USERNAME: ${STORAGE_MSQL_USERNAME}
+      STORAGE_MSQL_PASSWORD: ${STORAGE_MSQL_PASSWORD}
+      STORAGE_BASE_DOMAIN: ${STORAGE_BASE_DOMAIN}
+      STORAGE_MAX_FILE_SIZE: ${STORAGE_MAX_FILE_SIZE}
+      STORAGE_SERVICE_TOKEN: ${STORAGE_SERVICE_TOKEN}
+    volumes:
+      - ./atomp_automation_deployment/app_data/storage_webserver/uploads:/app/public/uploads
+    networks:
+      - atomp
+
+  atomp-ai:
+    build:
+      context: ./atomp-ai
+    container_name: atomp-ai
+    profiles:
+      - ai
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+    networks:
+      - atomp

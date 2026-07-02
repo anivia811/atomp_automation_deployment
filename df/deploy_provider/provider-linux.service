@@ -1,0 +1,13 @@
+[Unit]
+Description=ATOMP Linux Provider
+After=network-online.target
+
+[Service]
+User=devicefarm4
+WorkingDirectory=/home/devicefarm4/HAE_Deployment/deploy_provider/script/provider-linux
+Environment="PATH=/home/devicefarm4/HAE_Deployment/deploy_provider/resource/node-v8.17.0-linux-x64/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=bash /home/devicefarm4/HAE_Deployment/deploy_provider/script/provider-linux/build_systemd.sh
+Restart=always
+
+[Install]
+WantedBy=network-online.target

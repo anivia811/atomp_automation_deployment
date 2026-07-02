@@ -1,0 +1,27 @@
+[Unit]
+Description=ATOMP ngrok HTTP tunnel for port 8321
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/home/devicefarm/.nvm/versions/node/v10.24.1/bin"
+
+# Update this path if ngrok is elsewhere (check with: which ngrok)
+ExecStart=/home/devicefarm/.nvm/versions/node/v10.24.1/bin/npx ngrok http --url=atomp-appium.ngrok.io 8321 --log=stdout
+# If you use the env file for token:
+
+# Ensure it keeps running
+Restart=always
+RestartSec=5
+
+# Run as a non-root user if you prefer (replace 'ubuntu' with your local user)
+# User=ubuntu
+# WorkingDirectory=/home/ubuntu
+
+# Helpful logging to journalctl
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

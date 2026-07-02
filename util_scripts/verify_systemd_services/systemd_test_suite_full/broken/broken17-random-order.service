@@ -1,0 +1,15 @@
+[Service]
+RestartSec=5
+User=root
+ExecStart=/bin/true
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+[Unit]
+After=network-online.target
+StartLimitIntervalSec=0
+Wants=network-online.target
+After=NetworkManager-wait-online.service
+Description=Random Order

@@ -1,0 +1,9 @@
+[Unit]
+Description=No Service Section
+Wants=network-online.target
+After=network-online.target
+After=NetworkManager-wait-online.service
+StartLimitIntervalSec=0
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=ATOMP Linux Provider
+After=network-online.target
+Wants=network-online.target
+After=NetworkManager-wait-online.service
+StartLimitIntervalSec=0
+
+[Service]
+User=__USER__
+WorkingDirectory=__WORKING_DIR__/script/provider-linux
+Environment="PATH=__WORKING_DIR__/resource/node-v8.17.0-linux-x64/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=bash __WORKING_DIR__/script/provider-linux/build_systemd.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

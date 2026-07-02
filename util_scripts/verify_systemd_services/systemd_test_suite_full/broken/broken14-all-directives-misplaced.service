@@ -1,0 +1,15 @@
+[Unit]
+Description=All Keys Misplaced
+Wants=network-online.target
+After=network-online.target
+After=NetworkManager-wait-online.service
+StartLimitIntervalSec=0
+Restart=always           # WRONG section
+RestartSec=5             # WRONG section
+User=root                # WRONG section
+
+[Service]
+ExecStart=/bin/true
+
+[Install]
+WantedBy=multi-user.target

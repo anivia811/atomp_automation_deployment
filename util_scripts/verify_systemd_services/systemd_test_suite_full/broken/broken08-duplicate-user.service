@@ -1,0 +1,16 @@
+[Unit]
+Description=Duplicate User
+Wants=network-online.target
+After=network-online.target
+After=NetworkManager-wait-online.service
+StartLimitIntervalSec=0
+
+[Service]
+User=root
+User=appuser
+ExecStart=/bin/true
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,8 @@
 *.pem
+<<<<<<< HEAD
+=======
+*.key
+>>>>>>> 892dbb1 (Initial commit: ATOMP automation deployment)
 docker_images/*
 build_image/*
 

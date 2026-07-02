@@ -1,0 +1,18 @@
+[Unit]
+Description=AI API
+Wants=network-online.target
+After=network-online.target
+After=NetworkManager-wait-online.service
+StartLimitIntervalSec=0
+
+[Service]
+WorkingDirectory=/home/devicefarm1/HAE_Deployment/AI/source
+EnvironmentFile=/home/devicefarm1/HAE_Deployment/AI/ai-env/ai.env
+ExecStart=/home/devicefarm1/anaconda3/envs/atom_web/bin/python -m uvicorn app:app --host 0.0.0.0 --port 4730
+Restart=always
+RestartSec=5
+User=root
+Environment="PATH=/home/devicefarm1/anaconda3/envs/atom_web/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+[Install]
+WantedBy=multi-user.target

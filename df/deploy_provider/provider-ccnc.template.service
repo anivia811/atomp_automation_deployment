@@ -1,0 +1,13 @@
+[Unit]
+Description=ATOMP CCNC Provider
+After=network-online.target
+
+[Service]
+User=__USER__
+WorkingDirectory=__WORKING_DIR__/script/provider-ccnc
+Environment="PATH=__WORKING_DIR__/resource/node-v8.17.0-linux-x64/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=bash __WORKING_DIR__/script/provider-ccnc/build_systemd.sh
+Restart=always
+
+[Install]
+WantedBy=network-online.target

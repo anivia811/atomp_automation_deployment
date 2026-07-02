@@ -1,0 +1,372 @@
+version: "2.4"
+
+services:
+  rethinkdb:
+    image: rethinkdb:latest
+    container_name: rethinkdb
+    volumes:
+      - ${RETHINKDB_VOLUME}:/data
+    ports:
+      - "8080:8080"
+      - "28015:28015"
+    command: rethinkdb --bind all --cache-size 2048 --no-update-check
+  redis:
+    image: redis:8.2.2
+    container_name: redis
+    volumes:
+      - ${REDIS_VOLUME}:/data
+    ports:
+      - "6379:6379"
+  mysql:
+    image: mysql:8.0.24
+    container_name: mysql
+    healthcheck:
+      test: mysql -u atomp --password=atomp@12345 -e "SHOW DATABASES;"
+    volumes:
+      - ${MYSQL_VOLUME}:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=atomp
+      - MYSQL_PASSWORD=atomp@12345
+      - MYSQL_DATABASE=df_statistical
+  migrate:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: migrate
+    depends_on:
+      - rethinkdb
+    environment:
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+    command: stf migrate
+  migrate-mysql:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: migrate-mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=df_statistical
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+    command: stf migrate-mysql
+  api:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: api
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    volumes:
+      - ./kconfig:/config
+    environment:
+      - SECRET=${SECRET_KEY}
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+      - REDIS_HOST=redis
+    ports:
+      - "3700:3000"
+    command: >
+      stf api
+      --port 3000
+      --connect-sub tcp://triproxy-app:7150
+      --connect-push tcp://triproxy-app:7170
+      --public-key-path "/config/client-publickey.pem"
+      --auth-url "${ATOMID_URL}"
+      --administrator "${ADMINISTRATOR}" 
+      --connect-push-dev tcp://triproxy-dev:7270 
+      --connect-sub-dev tcp://triproxy-dev:7250 
+      --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc" 
+      --list-company-api "${LIST_COMPANY_API}" 
+      --external-storage-url "https://10.5.191.174/storage/upload" 
+      --storage-url ${STORAGE_URL}
+      --list-user-api ${LIST_USER_API}
+  app:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: app
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    volumes:
+      - ./kconfig:/config
+    environment:
+      - SECRET=${SECRET_KEY}
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+      - REDIS_HOST=redis
+    ports:
+      - "3100:3000"
+    command: >
+      stf app 
+      --port 3000 
+      --auth-url "${WEB_APP_AUTH_URL}" 
+      --websocket-url "${WEB_APP_URL}" 
+      --public-key-path "/config/client-publickey.pem" 
+      --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiVGVzdGVyNDAiLCJhbGxvd19zZXJ2aWNlIjpbIkRGIiwiVGFza2VyIiwiQVRPTUlEIl19LCJpYXQiOjE1ODM5OTkyNzZ9.ha55v-J72QLkcW3Won9ivTOZraEWyFrvDbei4tmW6ftfNFM47UJAhJSO_tBqEziHqXcUWUsv8TRvbIRa5FqdYCy6E7Enno9oVub4JsXh0CvVLs6_kRO12PLOlcfEkRKg3fxUT0PJ1flEugAey7J7xDKF2J6rEef84pLYYf5jgrY" 
+      --administrator ${ADMINISTRATOR} 
+      --env ${BUILD_ENV} 
+      --user-info-api-path "${API_GET_USER_INFO_URL}"
+  groups-engine:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: groups-engine
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    environment:
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+    command: > 
+      stf groups-engine 
+      --connect-sub tcp://triproxy-app:7150 
+      --connect-push tcp://triproxy-app:7170 
+      --connect-push-dev tcp://triproxy-dev:7270 
+      --connect-sub-dev tcp://triproxy-dev:7250
+  processor:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: processor
+    restart: always
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=df_statistical
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+    command: > 
+      stf processor  
+      --connect-app-dealer "tcp://triproxy-app:7160" 
+      --connect-dev-dealer "tcp://triproxy-dev:7260" 
+      --report-dealer tcp://report:7300 
+      --administrator ${ADMINISTRATOR}
+  reaper:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: reaper
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+    command: > 
+      stf reaper 
+      --connect-push tcp://triproxy-dev:7270 
+      --connect-sub tcp://triproxy-app:7150 
+      --heartbeat-timeout 30000
+  report:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: report
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=df_statistical
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+    command: stf report --report-dealer tcp://*:7300
+  schedule-job:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: schedule-job
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=df_statistical
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+    command: > 
+      stf schedule-job 
+      --connect-sub tcp://triproxy-dev:7250 
+      --connect-push tcp://triproxy-dev:7270 
+      --connect-push-app tcp://triproxy-app:7170 
+  storage-temp:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: storage-temp
+    volumes:
+      - ${STORAGE_VOLUME}:/data
+    ports:
+      - "3500:3000"
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=df_statistical
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+    command: > 
+      stf storage-temp 
+      --port 3000 
+      --save-dir /data
+  storage-permanent:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: storage-permanent
+    volumes:
+      - ${STORAGE_PERMANENT_VOLUME}:/data
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_DB=df_statistical
+      - MYSQL_USER=atomp
+      - MYSQL_PASS=atomp@12345
+    ports:
+      - "4200:3000"
+    command: > 
+      stf storage-permanent 
+      --port 3000 
+      --save-dir /data
+  storage-plugin-image:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: storage-plugin-image
+    depends_on:
+      - storage-temp
+    ports:
+      - "3400:3000"
+    command: > 
+      stf storage-plugin-image 
+      --port 3000 
+      --storage-url ${STORAGE_URL}
+  storage-plugin-apk:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: storage-plugin-apk
+    depends_on:
+      - storage-temp
+    volumes:
+      - ${STORAGE_VOLUME}:/data
+    ports:
+      - "3300:3000"
+    command: > 
+      stf storage-plugin-apk 
+      --port 3000 
+      --storage-url ${STORAGE_URL} 
+      --cache-dir /data
+  storage-plugin-ipa:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: storage-plugin-ipa
+    depends_on:
+      - storage-temp
+    volumes:
+      - ${STORAGE_VOLUME}:/data
+    ports:
+      - "3800:3000"
+    command: > 
+      stf storage-plugin-ipa 
+      --port 3000 
+      --storage-url ${STORAGE_URL} 
+      --cache-dir /data
+  stream-gate:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: stream-gate
+    ports:
+      - "3900:3000"
+      - "7280:7280"
+    command: > 
+      stf stream-gate 
+      --stream-gate-client-port 3000 
+      --stream-gate-device-port 7280
+  stream-gate-audio:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: stream-gate-audio
+    ports:
+      - "4100:3000"
+      - "7290:7290"
+    command: > 
+      stf stream-gate-audio 
+      --stream-gate-audio-client-port 3000 
+      --stream-gate-audio-device-port 7290
+  triproxy-app:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: triproxy-app
+    ports:
+      - "7150:7150"
+      - "7160:7160"
+      - "7170:7170"
+    command: > 
+      stf triproxy 
+      --bind-pub tcp://*:7150 
+      --bind-dealer tcp://*:7160 
+      --bind-pull tcp://*:7170
+  triproxy-dev:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: triproxy-dev
+    ports:
+      - "7250:7250"
+      - "7260:7260"
+      - "7270:7270"
+    command: >
+      stf triproxy 
+      --bind-pub tcp://*:7250 
+      --bind-dealer tcp://*:7260 
+      --bind-pull tcp://*:7270
+  websocket:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: websocket
+    restart: always
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      migrate-mysql:
+        condition: service_completed_successfully
+    ports:
+      - "3600:3000"
+    volumes:
+      - ./kconfig:/config
+    environment:
+      - SECRET=${SECRET_KEY}
+      - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
+      - NODE_OPTIONS=--max-old-space-size=4096
+    command: > 
+      stf websocket 
+      --port 3000 
+      --storage-url "${STORAGE_URL}" 
+      --connect-sub tcp://triproxy-app:7150 
+      --connect-push tcp://triproxy-app:7170
+      --private-key-path "/config/client-privatekey.pem"
+  provider:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: provider
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./kconfig:/config
+      - /dev/bus/usb:/dev/bus/usb
+    command: >
+      stf provider-linux
+      --name "local-245"
+      --location "local"
+      --connect-sub tcp://__SERVER_IP__:7250
+      --connect-push tcp://__SERVER_IP__:7270
+      --storage-url http://__SERVER_IP__:3500
+      --storage-permanent-url http://__SERVER_IP__:4200
+      --provider-storage-url http://__SERVER_IP__:3500/storage/upload
+      --min-port 11000
+      --max-port 12000
+      --heartbeat-interval 10000
+      --screen-ws-url-pattern "ws://__SERVER_IP__:8180/d/local/<%= serial %>/<%= publicPort %>/"
+      --stream-gate-client-pattern "ws://__SERVER_IP__:8180/c"
+      --stream-gate-device-pattern "ws://__SERVER_IP__:8180/dv"
+      --using-stream-gate true
+      --using-appium false
+      --appium-config ""
+      --screen-jpeg-quality 80
+      --fps 10
+      --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc"
+
+
+
+
+
+networks:
+  default:
+    name: deploy_master_default
+    external: true

@@ -1,4 +1,6 @@
 *.pem
+*.key
+*.crt
 docker_images/*
 build_image/*
 
@@ -9,6 +11,14 @@ atomp-bundle/
 atomp-bundle.tar.gz
 tester40-client.tar.gz
 atomp-fixes/
+
+# Heavy image archives
+initial_app_data_folder.zip
+df/*.tar.gz
+ATOMID_Deployment/*.tar.gz
+setup_mysql_redis/*.tar.gz
+nginx/*.tar.gz
+logs/
 
 # OS junk
 .DS_Store

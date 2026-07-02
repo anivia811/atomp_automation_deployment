@@ -71,9 +71,12 @@ log "Saving images..."
 # Patched devicefarm image — committed from running app container, has:
 #   - redis NX null fix (common-service.js)
 #   - socket.io v4 namespace fix (app/index.js)
+#   - session cookie Secure outside dev env (app/index.js)
 # Used for ALL device farm services (app, api, websocket, processor, etc.)
-save_image "devicefarm"      "devicefarm:bundle-20260630"
-save_image "atomid"          "atomid/web:b-20260629"
+save_image "devicefarm"      "devicefarm:bundle-20260702"
+# Patched atomid image — committed from running atomid container, has:
+#   - removed leftover debug console.log statements leaking JWT auth tokens
+save_image "atomid"          "atomid/web:bundle-20260702"
 save_image "mysql-atomid"    "mysql:8.0.34"
 save_image "mysql-df"        "mysql:8.0.24"
 save_image "mysql-auto"      "mysql:8.0.43"
@@ -135,7 +138,7 @@ sed 's/10\.42\.0\.245/__SERVER_IP__/g' \
 # docker-compose template — replace source IP and use bundle image tag
 sed \
   -e 's/10\.42\.0\.245/__SERVER_IP__/g' \
-  -e 's|devicefarm:b-20260629|devicefarm:bundle-20260630|g' \
+  -e 's|devicefarm:b-20260629|devicefarm:bundle-20260702|g' \
   "$SCRIPT_DIR/df/deploy_master/docker-compose.yaml" \
   > "$BUNDLE/config/df/docker-compose.yaml.tmpl"
 
@@ -170,7 +173,7 @@ PROVIDER_CMD=$(cat << 'PROVIDER'
 #     --network host \
 #     -v "$(pwd)/config/df/kconfig:/config" \
 #     -v /dev/bus/usb:/dev/bus/usb \
-#     devicefarm:bundle-20260630 \
+#     devicefarm:bundle-20260702 \
 #     stf provider-linux \
 #       --name "local" \
 #       --location "local" \
@@ -260,8 +263,8 @@ $PROVIDER_CMD
 
 | File | Image | Used by |
 |------|-------|---------|
-| devicefarm.tar.gz | devicefarm:bundle-20260630 | ALL device farm services (patched) |
-| atomid.tar.gz | atomid/web:b-20260629 | atomid |
+| devicefarm.tar.gz | devicefarm:bundle-20260702 | ALL device farm services (patched) |
+| atomid.tar.gz | atomid/web:bundle-20260702 | atomid (patched) |
 | mysql-atomid.tar.gz | mysql:8.0.34 | atomid-mysql |
 | mysql-df.tar.gz | mysql:8.0.24 | df mysql |
 | mysql-auto.tar.gz | mysql:8.0.43 | mysql-auto |
@@ -276,12 +279,28 @@ $PROVIDER_CMD
 | studio-client.tar.gz | studio-client:node20 | studio-client |
 | storage-web.tar.gz | storage-web:node20 | storage-web |
 
-## Patches baked into devicefarm:bundle-20260630
+## Config fixes in this bundle
+
+1. **\`/devicefarm/api/\` routing fix** — \`config/df/nginx/nginx.template.conf\`: the generic
+   \`/devicefarm\` location was swallowing \`/devicefarm/api/*\` calls and sending them to the
+   session-gated web app instead of the API service, which broke atomid's user-sync-to-DeviceFarm
+   call (and any other server-to-server call into the DF API) on every request
+
+## Patches baked into devicefarm:bundle-20260702
 
 1. **Redis NX null fix** — \`lib/db-redis/common-service.js\`: saveEmailSession returns OK
    when key already exists (prevents redirect loop on revisit within 24h)
 2. **socket.io v4 namespace fix** — \`lib/units/app/index.js\`: websocketUrl pathname
    stripped to '/' so client connects to namespace '/' instead of '/devicefarm/'
+3. **Session cookie Secure fix** — \`lib/units/app/index.js\`: cookie-session now sets
+   \`secure: true\` outside dev env instead of always \`false\`
+
+## Patches baked into atomid/web:bundle-20260702
+
+1. **Removed debug console.log leaking JWT auth tokens** — leftover \`[DUNGTT27]\`-tagged
+   debug statements in \`ServiceInterceptor\`, \`CanActivatePageService\`, \`LoginComponent\`,
+   \`DefaultLayoutComponent\`, and \`CommonService\` printed the raw auth token and decoded
+   SSO payloads to the browser console on every request/navigation
 README
 
 ok "README written"

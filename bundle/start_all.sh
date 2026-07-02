@@ -49,8 +49,8 @@ load_image() {
   ok "$tag loaded"
 }
 
-load_image "devicefarm"      "devicefarm:bundle-20260630"
-load_image "atomid"          "atomid/web:b-20260629"
+load_image "devicefarm"      "devicefarm:bundle-20260702"
+load_image "atomid"          "atomid/web:bundle-20260702"
 load_image "mysql-atomid"    "mysql:8.0.34"
 load_image "mysql-df"        "mysql:8.0.24"
 load_image "mysql-auto"      "mysql:8.0.43"
@@ -131,7 +131,7 @@ export REDIS_VOLUME="$DF_DATA/redis"
 export MYSQL_VOLUME="$DF_DATA/mysql"
 export STORAGE_VOLUME="$DF_DATA/storage"
 export STORAGE_PERMANENT_VOLUME="$DF_DATA/storage-permanent"
-export DEVICEFARM_IMAGE="devicefarm:bundle-20260630"
+export DEVICEFARM_IMAGE="devicefarm:bundle-20260702"
 
 # Render DF docker-compose if it's a template
 if [[ -f "$DF_CFG/docker-compose.yaml.tmpl" ]]; then

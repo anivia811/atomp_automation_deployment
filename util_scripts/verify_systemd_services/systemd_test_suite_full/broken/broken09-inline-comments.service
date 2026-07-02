@@ -1,0 +1,14 @@
+[Unit]
+Description=Inline Comments and Spaces
+Wants=network-online.target      # trailing comment
+After=network-online.target      # trailing comment
+After=NetworkManager-wait-online.service     # trailing
+StartLimitIntervalSec=0
+
+[Service]
+   User=root    
+ExecStart=/bin/true    # comment
+Restart=always     
+RestartSec=5    
+[Install]
+  WantedBy=multi-user.target   # comment

@@ -1,0 +1,14 @@
+{
+    "host": "10.20.0.3",
+    "port": 3306,
+    "database": "atomid",
+    "username": "atomp",
+    "password": "atomp@12345",
+    "dialect": "mysql",
+    "pool": {
+        "max": 30,
+        "min": 0,
+        "acquire": 100000,
+        "idle": 10000
+    }
+}

@@ -86,21 +86,21 @@ APP_WEBSOCKET_PORT_LIST["studio-web"]=33350
 
 # --------- Declare Server URL, Server IPv4 --------- #
 # External service URL
-ATOM_ID_URL="http://10.42.0.184/atomid"
-DEVICE_FARM_URL="http://10.42.0.184:3700"
+ATOM_ID_URL="http://10.193.9.75/atomid"
+DEVICE_FARM_URL="http://10.193.9.75:3700"
 # DeviceFarm STF frontend host (serves /static/app/devices/* icons). The :3700 API
 # host serves NO static assets, so studio-client device thumbnails must load from
 # the STF frontend (:81), NOT the API port. Used only by studio-client (ATOM_FARM).
-DEVICE_FARM_STF_URL="http://10.42.0.184:81"
+DEVICE_FARM_STF_URL="http://10.193.9.75:81"
 DEVICE_FARM_API_AUTH_KEY="studio-web-1782885942"
 AI_SERVER_URL="http://localhost:1337"
 BAMBOO_AUTOEVER_AUTHKEY=""
 # Automation server IPv4 declaration (Private only)
-TESTER40_SERVER_IPV4="10.42.0.184"
-STUDIO_SERVER_IPV4="10.42.0.184"
-STORAGE_SERVER_IPV4="10.42.0.184"
-TESTMAN_SERVER_IPV4="10.42.0.184"
-APPIUM_SERVER_IPV4="10.42.0.184"
+TESTER40_SERVER_IPV4="10.193.9.75"
+STUDIO_SERVER_IPV4="10.193.9.75"
+STORAGE_SERVER_IPV4="10.193.9.75"
+TESTMAN_SERVER_IPV4="10.193.9.75"
+APPIUM_SERVER_IPV4="10.193.9.75"
 MYSQL_SERVER_IPV4="mysql-auto" # Use "mysql-srv" if your mysql-container on same machine
 REDIS_SERVER_IPV4="redis-auto" # Use "redis-srv" if your redis-container on same machine
 
@@ -109,11 +109,11 @@ REDIS_SERVER_IPV4="redis-auto" # Use "redis-srv" if your redis-container on same
 # NGINX_SERVER_PUBLIC_URL="https://10.38.70.65"
 # NGINX_TESTER40_PATH="/tester40" # Meaning: "http://10.38.70.65/tester40", empty if not using nginx forward request
 # NGINX_STUDIO_PATH="/studio"
-NGINX_SERVER_PUBLIC_URL="http://10.42.0.184"
+NGINX_SERVER_PUBLIC_URL="http://10.193.9.75"
 NGINX_TESTER40_PATH="/tester40"
 NGINX_STUDIO_PATH="/studio"
 
-NGINX_TESTMAN_SERVER_PUBLIC_URL="http://10.42.0.184"
+NGINX_TESTMAN_SERVER_PUBLIC_URL="http://10.193.9.75"
 NGINX_TESTMAN_PATH="" # /testman
 
 # PROXY server URL (Apply for tester40-web only)

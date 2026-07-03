@@ -14,12 +14,12 @@ export BUILD_ENV="dev" # dev => non-secure session cookie for http
 export SECURED="" # http for local
 export SECRET_KEY="atom@nuclear!"
 export DEVICEFARM_IMAGE="devicefarm:node24"
-export DOMAIN="10.42.0.184" # laptop IP
-export ATOMID_URL="http://10.42.0.184/atomid"
+export DOMAIN="10.193.9.75" # laptop IP
+export ATOMID_URL="http://10.193.9.75/atomid"
 export EXTERNAL_STORAGE_URL="http://$DOMAIN/storage/upload/tmp" #Need change 3
 
 # path that external client use to connect APPLICATION
-export WEB_APP_URL="http://10.42.0.184:81/"
+export WEB_APP_URL="http://10.193.9.75:81/"
 # call from client
 export WEB_APP_AUTH_URL="$ATOMID_URL/login?callback=$WEB_APP_URL"
 # call from server (app, api, ...)

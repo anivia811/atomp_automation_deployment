@@ -69,20 +69,20 @@ services:
     ports:
       - "3700:3000"
     command: >
-      stf api 
-      --port 3000 
-      --connect-sub tcp://triproxy-app:7150 
-      --connect-push tcp://triproxy-app:7170 
-      --public-key-path "/config/client-publickey.pem" 
+      stf api
+      --port 3000
+      --connect-sub tcp://triproxy-app:7150
+      --connect-push tcp://triproxy-app:7170
+      --public-key-path "/config/client-publickey.pem"
+      --auth-url "${ATOMID_URL}"
       --administrator "${ADMINISTRATOR}" 
       --connect-push-dev tcp://triproxy-dev:7270 
       --connect-sub-dev tcp://triproxy-dev:7250 
       --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc" 
       --list-company-api "${LIST_COMPANY_API}" 
-      --external-storage-url "${EXTERNAL_STORAGE_URL}"
+      --external-storage-url "https://10.5.191.174/storage/upload" 
       --storage-url ${STORAGE_URL}
       --list-user-api ${LIST_USER_API}
-      --auth-url "${WEB_APP_AUTH_URL}"
   app:
     image: ${DEVICEFARM_IMAGE}
     container_name: app
@@ -330,8 +330,37 @@ services:
       --port 3000 
       --storage-url "${STORAGE_URL}" 
       --connect-sub tcp://triproxy-app:7150 
-      --connect-push tcp://triproxy-app:7170 
+      --connect-push tcp://triproxy-app:7170
       --private-key-path "/config/client-privatekey.pem"
+  provider:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: provider
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./kconfig:/config
+      - /dev/bus/usb:/dev/bus/usb
+    command: >
+      stf provider-linux
+      --name "local-245"
+      --location "local"
+      --connect-sub tcp://10.42.0.245:7250
+      --connect-push tcp://10.42.0.245:7270
+      --storage-url http://10.42.0.245:3500
+      --storage-permanent-url http://10.42.0.245:4200
+      --provider-storage-url http://10.42.0.245:3500/storage/upload
+      --min-port 11000
+      --max-port 12000
+      --heartbeat-interval 10000
+      --screen-ws-url-pattern "ws://10.42.0.245:8180/d/local/<%= serial %>/<%= publicPort %>/"
+      --stream-gate-client-pattern "ws://10.42.0.245:8180/c"
+      --stream-gate-device-pattern "ws://10.42.0.245:8180/dv"
+      --using-stream-gate true
+      --using-appium false
+      --appium-config ""
+      --screen-jpeg-quality 80
+      --fps 10
+      --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc"
 
 
 

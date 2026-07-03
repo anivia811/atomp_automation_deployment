@@ -1,0 +1,84 @@
+{
+  "host": "http://10.20.0.2",
+  "port": 8081,
+  "api": {
+    "privateKey": "development!@atom@*^%",
+    "expiresIn": "1h"
+  },
+  "redis": {
+    "database": 0,
+    "host": "10.20.0.4",
+    "port": 6379
+  },
+  "user": {
+    "redis_key_role": "_acl_roles_atomid"
+  },
+  "otp_issued_in" : 180000,
+  "otp_step": 180,
+  "otp_reload_time": 60000,
+  "mail": {
+    "host": "smtp.yandex.com",
+    "port": 465,
+    "auth": {
+      "user": "atom@igzem.com",
+      "pass": "ATOM@fsoft"
+    },
+    "connectionTimeout": 7200000,
+    "sender": "atom@igzem.com",
+    "survey_email": {
+      "base_url_with_delivery": "https://docs.google.com/forms/1234/withDelivery?",
+      "base_url_no_delivery": "https://docs.google.com/forms/1234/noDelivery?",
+      "query_name_with_delivery": "entry.111",
+      "query_name_no_delivery": "entry.122"
+    }
+  },
+  "token": {
+    "accessSecretKey": "@gst@atom@accesstoken",
+    "accessTokenLife": "8h",
+    "refreshTokenLifeMilliseconds": "31536000000",
+    "redisKeyToken": "_token_atomid"
+  },
+  "authFpt": {
+    "authUrl": "https://atomid.fsoft.com.vn",
+    "authCredential": "atomprod:atom@prod@2020!"
+  },
+  "openssl": {
+    "privateKeyClientPath": "/config/client-privatekey.pem",
+    "publicKeyClientPath": "/config/client-publickey.pem",
+    "privateKeyServicePath": "/config/service-privatekey.pem",
+    "publicKeyServicePath": "/config/service-publickey.pem"
+  },
+  "otp_forgotpassword_step": 300,
+  "otp_forgotpassword_in": 300000,
+  "redirectOrigin": [
+    "https?://.*.atomp.io.*",
+    "https?://[0-9]+.[0-9]+.[0-9]+.[0-9]+(:[0-9]+)?.*",
+    "https?://.*.fsoft.com.vn",
+    "(https?://)?localhost(:[0-9]+)?.*",
+    "https?://.*.ngrok.io.*",
+    "https?://dndf.recoff.cloud.*"
+  ],
+  "service": [
+    "df",
+    "t40",
+    "studio",
+    "tm"
+  ],
+  "tester40": {
+    "host": "http://10.193.9.75:33000/tester40",
+    "api": "http://10.193.9.75:33000/tester40/api"
+  },
+  "devicefarm": {
+    "host": "http://10.193.9.75:3700",
+    "api": "http://10.193.9.75:3700/api/v1"
+  },
+  "serviceToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiQVRPTUlEIiwiYWxsb3dfc2VydmljZSI6WyJUdW5uZWxfU2VydmVyIl19LCJpYXQiOjE2MTg1NDA5OTh9.TMgoHOkgJIUbw9QInBgqIUzmZPQa5pZpN8LuBJ4OEbS30nd_dbs_5DCDcHYQV9eoyAtC4q6sgAnebJ8tQ0RqLVCl74LUJ947uGdHeW1zgvfNlXx6zjA0q_Hke_2ld0f_H_olCn11Dt22IKNUawH7rFDMTKP8wgVpJhnq3JKKPcI",
+  "tunnelServerUrl": "",
+  "login_retry_time_in_hour": 1,
+  "login_delay_retry_time_in_minute": 15,
+  "login_retry_attempts": 5,
+  "limited_of_days_inactivity": 90,
+  "schedule_time": "0 0 17 * * *",
+  "time_zone": "UTC",
+  "globalAgentOptions": { "rejectUnauthorized": false }
+}

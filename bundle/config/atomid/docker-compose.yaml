@@ -1,0 +1,61 @@
+version: "2.4"
+
+networks:
+  atomid:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.20.0.0/24
+          gateway: 10.20.0.1
+
+services:
+  atomid-mysql:
+    image: mysql:8.0.34
+    container_name: atomid-mysql
+    healthcheck:
+      test: mysql -u atomp --password=atomp@12345 -e "SHOW DATABASES;"
+    networks:
+      atomid:
+        ipv4_address: 10.20.0.3
+    volumes:
+      - ${ATOMID_MYSQL_DATA}:/var/lib/mysql
+      - ${ATOMID_SQL}:/source/atompid.sql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=atomid
+      - MYSQL_USER=atomp
+      - MYSQL_PASSWORD=atomp@12345
+    restart: unless-stopped
+
+  atomid-redis:
+    image: redis:8.6.1
+    container_name: atomid-redis
+    networks:
+      atomid:
+        ipv4_address: 10.20.0.4
+    restart: unless-stopped
+
+  atomid:
+    image: atomid/web:bundle-20260702
+    container_name: atomid
+    networks:
+      atomid:
+        ipv4_address: 10.20.0.2
+    ports:
+      - "8081:8081"
+    depends_on:
+      atomid-mysql:
+        condition: service_healthy
+    volumes:
+      - ${ATOMID_APPENV}/database.json:/app/config/environments/production/database.json
+      - ${ATOMID_APPENV}/server.json:/app/config/environments/production/server.json
+      - ${ATOMID_APPENV}/client-privatekey.pem:/config/client-privatekey.pem
+      - ${ATOMID_APPENV}/client-publickey.pem:/config/client-publickey.pem
+      - ${ATOMID_APPENV}/service-privatekey.pem:/config/service-privatekey.pem
+      - ${ATOMID_APPENV}/service-publickey.pem:/config/service-publickey.pem
+      - ${ATOMID_UPLOADS}:/app/public/uploads
+    environment:
+      - NODE_ENV=production
+    command: node server.js
+    restart: unless-stopped

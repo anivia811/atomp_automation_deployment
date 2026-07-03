@@ -1,0 +1,17 @@
+[Unit]
+Description=ATOMP Linux Appium
+Wants=network-online.target
+After=network-online.target
+After=NetworkManager-wait-online.service
+StartLimitIntervalSec=0
+
+[Service]
+User=__USER__
+WorkingDirectory=__WORKING_DIR__/source/remote_linux_server
+Environment="PATH=__WORKING_DIR__/node-v10.24.1-linux-x64/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart=/bin/bash start.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

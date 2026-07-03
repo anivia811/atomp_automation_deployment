@@ -1,0 +1,56 @@
+version: "2.4"
+
+networks:
+  atomid:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.20.0.0/24
+          gateway: 10.20.0.1
+
+services:
+  atomid-mysql:
+    image: mysql:8.0.34
+    container_name: atomid-mysql
+    healthcheck:
+      test: mysql -u atomp --password=atomp@12345 -e "SHOW DATABASES;"
+    networks:
+      atomid:
+        ipv4_address: ${DOCKER_NET_IP_MYSQL:-10.20.0.3}
+    volumes:
+      - ${ATOMID_MYSQL_VOLUME}:/var/lib/mysql
+      - ${ATOMID_CONFIG_DIR}/atomid.sql:/source/atompid.sql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=atomid
+      - MYSQL_USER=atomp
+      - MYSQL_PASSWORD=atomp@12345
+  atomid-redis:
+    image: redis:8.6.1
+    container_name: atomid-redis
+    networks:
+      atomid:
+        ipv4_address: ${DOCKER_NET_IP_REDIS:-10.20.0.4}
+  atomid:
+    image: atomid/web:b-20260629
+    container_name: atomid
+    networks:
+      atomid:
+        ipv4_address: ${DOCKER_NET_IP_ATOMID:-10.20.0.2}
+    ports:
+      - "8081:8081"
+    depends_on:
+      atomid-mysql:
+        condition: service_healthy
+    volumes:
+      - ${ATOMID_CONFIG_DIR}/appenv/database.json:/app/config/environments/production/database.json
+      - ${ATOMID_CONFIG_DIR}/appenv/server.json:/app/config/environments/production/server.json
+      - ${ATOMID_CONFIG_DIR}/appenv/client-privatekey.pem:/config/client-privatekey.pem
+      - ${ATOMID_CONFIG_DIR}/appenv/client-publickey.pem:/config/client-publickey.pem
+      - ${ATOMID_CONFIG_DIR}/appenv/service-privatekey.pem:/config/service-privatekey.pem
+      - ${ATOMID_CONFIG_DIR}/appenv/service-publickey.pem:/config/service-publickey.pem
+      - ${ATOMID_UPLOADS_VOLUME}:/app/public/uploads
+    environment:
+      - NODE_ENV=production
+    command: node server.js

@@ -1,0 +1,14 @@
+[Unit]
+Description=Missing StartLimitInterval
+Wants=network-online.target
+After=network-online.target
+After=NetworkManager-wait-online.service
+
+[Service]
+User=root
+ExecStart=/bin/true
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

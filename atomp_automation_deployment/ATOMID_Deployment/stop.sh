@@ -1,0 +1,5 @@
+export DOCKER_NET_IP_ATOMID=10.20.0.2
+export DOCKER_NET_IP_MYSQL=10.20.0.3
+export DOCKER_NET_IP_REDIS=10.20.0.4
+
+docker compose down

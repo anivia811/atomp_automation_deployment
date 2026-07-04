@@ -114,7 +114,7 @@ sleep 15
 ATOMID_DIR="$SCRIPT_DIR/ATOMID_Deployment"
 ATOMID_IMAGE="atomid/web:b-local-20260702"
 
-mkdir -p "$ATOMID_DIR/mysql-volume"; chmod a+rw "$ATOMID_DIR/mysql-volume"
+mkdir -p "$ATOMID_DIR/mysql-volume"; chmod a+rw "$ATOMID_DIR/mysql-volume" 2>/dev/null || true
 mkdir -p "$ATOMID_DIR/uploads"
 
 # 7a. ATOMID databases (only) via compose

@@ -48,7 +48,22 @@ services:
       - rethinkdb
     environment:
       - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
-    command: stf migrate
+    # On a fresh RethinkDB data dir, the container reports "started" before
+    # shard/replica election finishes, so the first migrate attempt fails with
+    # ReqlOpFailedError: primary replica ... not available — and since api/app/
+    # etc. all require migrate to complete successfully, that one race takes
+    # down the whole device farm stack (df-nginx included). Retry instead of
+    # failing once.
+    command: >
+      sh -c '
+        for i in $(seq 1 18); do
+          stf migrate && exit 0
+          echo "[migrate] attempt $$i failed (rethinkdb not fully ready yet), retrying in 10s..."
+          sleep 10
+        done
+        echo "[migrate] giving up after 18 attempts"
+        exit 1
+      '
   migrate-mysql:
     image: ${DEVICEFARM_IMAGE}
     container_name: migrate-mysql

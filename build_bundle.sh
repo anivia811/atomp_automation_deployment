@@ -54,29 +54,37 @@ mkdir -p \
 save_image() {
   local name="$1"; local ref="$2"
   local out="$BUNDLE/images/$name.tar.gz"
+  local reffile="$BUNDLE/images/$name.ref"
   if $SKIP_IMAGES; then
     log "  [SKIP] $name (--skip-images)"
     return
   fi
-  if [[ -f "$out" ]]; then
+  # Re-save if the archive is missing OR the ref it was saved from has changed
+  # (e.g. you bumped a date-stamped tag like devicefarm:b-YYYYMMDD after a
+  # rebuild) — comparing only file existence let stale image bytes silently
+  # ship in the bundle even after the tag was updated in this script.
+  if [[ -f "$out" && "$(cat "$reffile" 2>/dev/null)" == "$ref" ]]; then
     log "  [SKIP] $name already exists ($(du -sh "$out" | cut -f1))"
     return
   fi
   log "  [SAVE] $name  ← $ref"
   docker save "$ref" | gzip -1 > "$out"
+  echo "$ref" > "$reffile"
   log "         → $(du -sh "$out" | cut -f1)"
 }
 
 log "Saving images..."
-# Patched devicefarm image — committed from running app container, has:
-#   - redis NX null fix (common-service.js)
-#   - socket.io v4 namespace fix (app/index.js)
-#   - session cookie Secure outside dev env (app/index.js)
-# Used for ALL device farm services (app, api, websocket, processor, etc.)
-save_image "devicefarm"      "devicefarm:bundle-20260702"
-# Patched atomid image — committed from running atomid container, has:
-#   - removed leftover debug console.log statements leaking JWT auth tokens
-save_image "atomid"          "atomid/web:bundle-20260702"
+# Patched devicefarm image (2026-07-03) — committed from running containers, has:
+#   - redis NX null fix, socket.io v4 namespace fix, session cookie Secure-outside-dev
+#   - loadUser(data.data.email) JWT fix + company_id=-1 device visibility fix
+#   - vendor/STFService, vendor/appium, etc. (real device + Appium support, was missing)
+#   - statistical/report Angular app build
+# Used for ALL device farm services (app, api, websocket, processor, provider, provider-android, etc.)
+save_image "devicefarm"      "devicefarm:b-20260703"
+# Base atomid image. The OTP algorithm fix (users.controller.js) and the frontend
+# redirect-loop/cookie fix (public_fixed/) are shipped as separate bind-mounted
+# files below, not baked into this image — see config/atomid/appenv/.
+save_image "atomid"          "atomid/web:b-20260629"
 save_image "mysql-atomid"    "mysql:8.0.34"
 save_image "mysql-df"        "mysql:8.0.24"
 save_image "mysql-auto"      "mysql:8.0.43"
@@ -107,6 +115,26 @@ cp "$SCRIPT_DIR/ATOMID_Deployment/script/deploy/appenv/client-privatekey.pem" \
 cp "$SCRIPT_DIR/ATOMID_Deployment/script/deploy/atomid.sql" \
    "$BUNDLE/config/atomid/"
 
+# 2FA/OTP algorithm fix (sha512 mismatch) — bind-mounted over the stock
+# users.controller.js inside the atomid image, not baked into the image itself.
+cp "$SCRIPT_DIR/ATOMID_Deployment/script/deploy/appenv/users.controller.js" \
+   "$BUNDLE/config/atomid/appenv/"
+
+# Rebuilt Angular frontend (fixes hardcoded atomp.io redirect links + the
+# .atomp.io cookie-domain infinite login/logout loop on IP-based deployments).
+# Bind-mounted over /app/public inside the atomid image.
+#
+# The Angular build bakes the DeviceFarm/Tester40 link URLs directly into the
+# compiled JS as literal strings (build-time env injection, no runtime config
+# for this piece) — so this machine's IP (10.42.0.245) is hardcoded in
+# main.*.js. Ship a __SERVER_IP__-templated copy instead and render it fresh
+# per machine in start_all.sh, same pattern as server.json.tmpl.
+mkdir -p "$BUNDLE/config/atomid/appenv/public_fixed_tmpl"
+cp -r "$SCRIPT_DIR/ATOMID_Deployment/script/deploy/appenv/public_fixed/." \
+   "$BUNDLE/config/atomid/appenv/public_fixed_tmpl/"
+grep -rl "10\.42\.0\.245" "$BUNDLE/config/atomid/appenv/public_fixed_tmpl/" 2>/dev/null | \
+  while read -r f; do sed -i 's/10\.42\.0\.245/__SERVER_IP__/g' "$f"; done
+
 # server.json — replace source IP with placeholder, rendered at deploy time
 sed 's/10\.42\.0\.245/__SERVER_IP__/g' \
   "$SCRIPT_DIR/ATOMID_Deployment/script/deploy/appenv/server.json" \
@@ -135,16 +163,35 @@ sed 's/10\.42\.0\.245/__SERVER_IP__/g' \
   "$SCRIPT_DIR/df/deploy_master/config.sh" \
   > "$BUNDLE/config/df/config.sh.tmpl"
 
-# docker-compose template — replace source IP and use bundle image tag
+# docker-compose template — replace source IP. Services all reference
+# ${DEVICEFARM_IMAGE} (set in config.sh.tmpl above), so no image-tag rewrite
+# needed here. Includes provider-android (real ADB-based device provider,
+# added 2026-07-03) alongside the existing provider-linux service.
 sed \
   -e 's/10\.42\.0\.245/__SERVER_IP__/g' \
-  -e 's|devicefarm:b-20260629|devicefarm:bundle-20260702|g' \
   "$SCRIPT_DIR/df/deploy_master/docker-compose.yaml" \
   > "$BUNDLE/config/df/docker-compose.yaml.tmpl"
 
-# Patch STF service images in the template to use the bundled tag
-# (api, websocket, etc. all use DEVICEFARM_IMAGE; the bundle commit makes them identical)
 ok "device farm config done"
+
+# ─── Appium (real Android device automation) ───────────────────────────────────
+hr; log "Copying Appium..."
+
+mkdir -p "$BUNDLE/appium"
+# Full source + node_modules (~800MB) so a new machine doesn't need to run
+# npm install itself. Started as a native process (not Docker) via start_appium.sh
+# because it needs direct access to the host's adb/USB stack.
+cp -r "$SCRIPT_DIR/../appium/." "$BUNDLE/appium/" 2>/dev/null || \
+  log "  [WARN] Appium source not found at ../appium — skipping (start_all.sh will warn at runtime)"
+# Rewrite hardcoded dev-machine paths to be relative to wherever the bundle
+# gets extracted on the new machine.
+sed \
+  -e 's|APPIUM_DIR="/home/a1/atomp-2/appium"|APPIUM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)/appium"|' \
+  -e 's|LOG_DIR="/home/a1/atomp-2/atomp_automation_deployment/app_data/appium_webserver/logs"|LOG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)/data/appium/logs"|' \
+  "$SCRIPT_DIR/start_appium.sh" > "$BUNDLE/start_appium.sh" 2>/dev/null
+chmod +x "$BUNDLE/start_appium.sh" 2>/dev/null
+
+ok "appium done ($(du -sh "$BUNDLE/appium" 2>/dev/null | cut -f1))"
 
 # ─── Router nginx config (runs as docker container — no host nginx needed) ────
 hr; log "Copying router nginx config..."

@@ -4,6 +4,9 @@ set -euo pipefail
 
 log() { echo "[$(date +%H:%M:%S)] $*"; }
 
+log "Stopping Appium..."
+pkill -f "packages/appium/index.js" 2>/dev/null && log "  appium stopped" || log "  appium not running"
+
 log "Stopping host router..."
 docker rm -f host-router 2>/dev/null || true
 

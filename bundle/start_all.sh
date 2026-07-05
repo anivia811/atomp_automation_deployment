@@ -49,8 +49,8 @@ load_image() {
   ok "$tag loaded"
 }
 
-load_image "devicefarm"      "devicefarm:bundle-20260702"
-load_image "atomid"          "atomid/web:bundle-20260702"
+load_image "devicefarm"      "devicefarm:b-20260703"
+load_image "atomid"          "atomid/web:b-20260705"
 load_image "mysql-atomid"    "mysql:8.0.34"
 load_image "mysql-df"        "mysql:8.0.24"
 load_image "mysql-auto"      "mysql:8.0.43"
@@ -79,8 +79,8 @@ ensure_network() {
 }
 
 ensure_network "atomp_automation_network"  "172.23.0.0/16" "172.23.0.1"
-# deploy_master_default is created by docker compose; pre-create with fixed subnet
-ensure_network "deploy_master_default"     "172.21.0.0/16" "172.21.0.1"
+# deploy_master's network is pinned via the "networks:" block in its own
+# docker-compose.yaml — do NOT pre-create it here, Compose needs to own it.
 
 # ─── 4. Atomid stack ─────────────────────────────────────────────────────────
 hr; log "Starting atomid stack..."
@@ -96,12 +96,27 @@ if [[ -f "$ATOMID_CFG/appenv/server.json.tmpl" ]]; then
   ok "server.json rendered"
 fi
 
+# Render the atomid frontend (its DeviceFarm/Tester40 links are baked into the
+# compiled JS at build time — re-render the whole tree fresh so re-runs with a
+# different SERVER_IP aren't stuck with a stale value).
+if [[ -d "$ATOMID_CFG/appenv/public_fixed_tmpl" ]]; then
+  rm -rf "$ATOMID_CFG/appenv/public_fixed"
+  cp -r "$ATOMID_CFG/appenv/public_fixed_tmpl" "$ATOMID_CFG/appenv/public_fixed"
+  grep -rl "__SERVER_IP__" "$ATOMID_CFG/appenv/public_fixed" 2>/dev/null | \
+    while read -r f; do sed -i "s/__SERVER_IP__/$SERVER_IP/g" "$f"; done
+  ok "atomid frontend rendered for $SERVER_IP"
+fi
+
 # Export paths for atomid docker-compose
 export ATOMID_APPENV="$ATOMID_CFG/appenv"
 export ATOMID_MYSQL_DATA="$ATOMID_DATA/mysql"
 export ATOMID_UPLOADS="$ATOMID_DATA/uploads"
 export ATOMID_SQL="$ATOMID_CFG/atomid.sql"
 
+docker compose \
+  -f "$ATOMID_CFG/docker-compose.yaml" \
+  -p atomid_deployment \
+  up -d --force-recreate atomid
 docker compose \
   -f "$ATOMID_CFG/docker-compose.yaml" \
   -p atomid_deployment \
@@ -131,12 +146,36 @@ export REDIS_VOLUME="$DF_DATA/redis"
 export MYSQL_VOLUME="$DF_DATA/mysql"
 export STORAGE_VOLUME="$DF_DATA/storage"
 export STORAGE_PERMANENT_VOLUME="$DF_DATA/storage-permanent"
-export DEVICEFARM_IMAGE="devicefarm:bundle-20260702"
+# DEVICEFARM_IMAGE is already set correctly by sourcing config.sh above —
+# do NOT hardcode/override it here, that's what caused it to silently drift
+# to a stale tag before.
 
 # Render DF docker-compose if it's a template
 if [[ -f "$DF_CFG/docker-compose.yaml.tmpl" ]]; then
   sed "s/__SERVER_IP__/$SERVER_IP/g" "$DF_CFG/docker-compose.yaml.tmpl" \
     > "$DF_CFG/docker-compose.yaml"
+fi
+
+# A stale `deploy_master_default` network (e.g. plain-created by an older
+# version of this script, or left over from a partial/failed prior run) has
+# the wrong Compose ownership label and makes `docker compose up` warn/fail
+# with "network ... was found but has incorrect label". Compose's own
+# docker-compose.yaml (networks: block) is the source of truth for this
+# network — if a non-Compose-owned one is sitting in its place and nothing
+# is attached to it, drop it so Compose can (re)create it correctly.
+if docker network inspect deploy_master_default >/dev/null 2>&1; then
+  NET_LABEL="$(docker network inspect deploy_master_default \
+    --format '{{ index .Labels "com.docker.compose.network" }}' 2>/dev/null || true)"
+  if [[ "$NET_LABEL" != "default" ]]; then
+    NET_CONTAINERS="$(docker network inspect deploy_master_default \
+      --format '{{len .Containers}}' 2>/dev/null || echo 1)"
+    if [[ "$NET_CONTAINERS" == "0" ]]; then
+      warn "  deploy_master_default is a stale non-Compose network — removing so Compose can recreate it"
+      docker network rm deploy_master_default
+    else
+      warn "  deploy_master_default has the wrong Compose label but has containers attached — leaving it as-is"
+    fi
+  fi
 fi
 
 docker compose \
@@ -145,6 +184,52 @@ docker compose \
   up -d --no-recreate
 
 ok "device farm stack started (provider excluded — see README)"
+
+# ─── 5b. Auto-provision a fresh Device Farm API access token ─────────────────
+# The token studio-web/tester40-web/tasker-web use to call Device Farm's
+# private API is validated by exact RethinkDB lookup (accessTokens.get(id)),
+# never by decoding — so a token baked in at build time is only ever valid on
+# the machine it was generated on. Generate a fresh one here, for whichever
+# admin has already logged into Device Farm at least once (that first login
+# is what creates their `users` row — this script can't fabricate that part).
+hr; log "Provisioning a Device Farm API access token..."
+
+TOKEN_GEN_JS='
+const jwtutil = require("/app/lib/util/jwtutil");
+const r = require("/app/node_modules/rethinkdb");
+const util = require("util");
+const uuid = require("/app/node_modules/uuid");
+const TITLE = "atomp-automation-shared-token";
+r.connect({host:"rethinkdb", port:28015, db:"atompdf"}).then(async conn => {
+  const cursor = await r.table("users").filter({privilege: "admin"}).run(conn);
+  const admins = await cursor.toArray();
+  if (admins.length === 0) { console.log("NO_ADMIN_YET"); process.exit(0); }
+  const email = admins[0].email, name = admins[0].name || email;
+  await r.table("accessTokens").getAll(email, {index: "email"}).filter({title: TITLE}).delete().run(conn);
+  const jwt = jwtutil.encode({payload: {email, name}, privateKeyPath: "/config/client-privatekey.pem"});
+  const id = util.format("%s-%s", uuid.v4(), uuid.v4()).replace(/-/g, "");
+  await r.table("accessTokens").insert({email, id, title: TITLE, jwt}).run(conn);
+  console.log("TOKEN:" + id);
+  process.exit(0);
+}).catch(e => { console.error("ERR:", e.message); process.exit(1); });
+'
+
+DEVICE_FARM_AUTHKEY=""
+for attempt in 1 2 3 4 5; do
+  TOKEN_OUTPUT="$(docker exec app node -e "$TOKEN_GEN_JS" 2>&1)" && break
+  sleep 2
+done
+
+if [[ "$TOKEN_OUTPUT" == *"TOKEN:"* ]]; then
+  DEVICE_FARM_AUTHKEY="${TOKEN_OUTPUT##*TOKEN:}"
+  ok "Device Farm access token provisioned"
+elif [[ "$TOKEN_OUTPUT" == *"NO_ADMIN_YET"* ]]; then
+  warn "  No Device Farm admin has logged in yet — studio/tester40/tasker will start without a valid API token."
+  warn "  Log into Device Farm once (as an email listed in ADMINISTRATOR in config.sh), then re-run start_all.sh"
+  warn "  to auto-provision the token and pick up working device lists in Studio/Tester40/Tasker."
+else
+  warn "  Could not auto-provision a Device Farm access token: $TOKEN_OUTPUT"
+fi
 
 # ─── 6. df-nginx ──────────────────────────────────────────────────────────────
 hr; log "Starting df-nginx..."
@@ -260,7 +345,11 @@ STORAGE_PRIVATE="http://storage-web:3000"
 TESTER40_PRIVATE="http://tester40-web:3000"
 STUDIO_PRIVATE="http://studio-web:3000"
 TASKER_PRIVATE="http://tasker-web:3000"
-DEVICE_FARM_AUTHKEY="94b45a6ca571478b8cb4582c1a3281ae2356120b20114633b30f41a1eacf2e38"
+# DEVICE_FARM_AUTHKEY was auto-provisioned in step 5b above (empty if no
+# Device Farm admin has logged in yet) — do NOT hardcode it here, that's
+# exactly what made it dead-on-arrival on every machine but the one it was
+# generated on.
+DEVICE_FARM_API_URL="http://${SERVER_IP}:3700"
 
 # ── tester40-web ──
 recreate_container tester40-web \
@@ -284,7 +373,7 @@ recreate_container tester40-web \
   -e TESTER40_STORAGE_API_HOST_INTERNAL_PATH=localhost \
   -e TESTER40_TASKER_HOST="$TASKER_PRIVATE" \
   -e TESTER40_STUDIO_API_HOST="$STUDIO_PRIVATE" \
-  -e TESTER40_DEVICEFARM_HOST="http://localhost:1337" \
+  -e TESTER40_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e TESTER40_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
   -e TESTER40_AI_HOST="http://localhost:1337" \
   -e TESTER40_SELENIUM_GRID_HOST="http://${SERVER_IP}:4444" \
@@ -337,7 +426,7 @@ recreate_container tasker-web \
   -e TASKER_TESTER40_HOST="$TESTER40_PRIVATE" \
   -e TASKER_STORAGE_API_HOST_FULL_PATH="$STORAGE_PRIVATE/storage" \
   -e TASKER_STORAGE_API_HOST_INTERNAL_PATH="$STORAGE_PRIVATE/storage" \
-  -e TASKER_DEVICEFARM_HOST="http://localhost:1337" \
+  -e TASKER_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e TASKER_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
   -e TASKER_AI_HOST="http://localhost:1337" \
   -e TASKER_AI_PIPE_URL='[{"from":"","to":""}]' \
@@ -365,7 +454,7 @@ recreate_container studio-web \
   -e STUDIO_PUBLIC_HOST="$NGINX_SERVER_URL/studio/tmp" \
   -e STUDIO_TESTER40_HOST="$TESTER40_PRIVATE" \
   -e STUDIO_STORAGE_API_HOST_FULL_PATH="$STORAGE_PRIVATE/storage" \
-  -e STUDIO_DEVICEFARM_HOST="http://localhost:1337" \
+  -e STUDIO_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e STUDIO_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
   -e STUDIO_AI_HOST="http://localhost:1337" \
   -e STUDIO_PIPE_URL='[{"from":"","to":""}]' \
@@ -373,6 +462,10 @@ recreate_container studio-web \
   -e STUDIO_ALLOW_STORAGE_HOST="[]" \
   -e STUDIO_APPIUM_HOST="$SERVER_IP" \
   -e STUDIO_APPIUM_PORT=4723 \
+  -e STUDIO_APPIUM_PROXY_HOST="" \
+  -e STUDIO_APPIUM_PROXY_PORT=0 \
+  -e STUDIO_APPIUM_PROXY_PATH_PATTERN="" \
+  -e STUDIO_APPIUM_PROXY_LINUX_PATH_PATTERN="" \
   -e STUDIO_COOKIE_HTTP_ONLY=false \
   -e STUDIO_COOKIE_SECURE=false \
   -e STUDIO_COOKIE_SAME_SITE= \
@@ -392,7 +485,7 @@ recreate_container studio-client \
   -e STUDIO_CLIENT_SERVER_HOST="$NGINX_SERVER_URL" \
   -e STUDIO_CLIENT_SOCKET_ENDPOINT="ws://${SERVER_IP}/studio/socket" \
   -e STUDIO_CLIENT_PATH_PUBLIC_URL=/studio/ \
-  -e STUDIO_CLIENT_DEVICEFARM_HOST="http://localhost:1337" \
+  -e STUDIO_CLIENT_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e STUDIO_CLIENT_ALLOW_REDIRECTION_SITES="*" \
   -e CI=false \
   -e DISABLE_ESLINT_PLUGIN=true \
@@ -415,7 +508,7 @@ recreate_container storage-web \
   -e STORAGE_STORAGE_BASE_PATH=/storage/file \
   -e STORAGE_STORAGE_PATH=/usr/src/app/uploads \
   -e STORAGE_MAX_FILE_SIZE=5000000000 \
-  -e STORAGE_ALLOWED_CORS="*" \
+  -e STORAGE_ALLOWED_CORS='"*"' \
   -e STORAGE_SERVICE_TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiKiIsImFsbG93X3NlcnZpY2UiOlsiKiJdfSwiaWF0IjoxNTk2MDkxNzMzfQ.htXogVlyOzo5muVQEJIckwdEMiVZB4YV3_Ve9YhEMSyXUENkX7dhPvOKu1A-dYN70D_LwC0KL-4uHafZn7b3l7OT7Z2G6LaGzo8HSy6_P64B-EiXSq5eQC-xDC0QhJOP3AokWaFROkjwgCvct2-jjOXo_NBRFzw9HRrv-8FtX2c" \
   -e STORAGE_INTERNAL_PORT=3000 \
   -e NODE_ENV=production \
@@ -452,6 +545,11 @@ ok "host-router started on :80"
 hr
 echo ""
 echo "  ATOMP services are up at http://$SERVER_IP"
+if [ -f "$BUNDLE/start_appium.sh" ] && [ -d "$BUNDLE/appium" ]; then
+  hr; log "Starting Appium (Android automation, port 4723)..."
+  bash "$BUNDLE/start_appium.sh" || warn "Appium failed to start — see start_appium.sh requirements (adb, ANDROID_HOME)"
+fi
+
 echo ""
 echo "  Atomid:          http://$SERVER_IP/atomid/"
 echo "  Device Farm:     http://$SERVER_IP:8180/devicefarm/"

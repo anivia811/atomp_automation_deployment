@@ -129,7 +129,7 @@ if docker image inspect "$ATOMID_IMAGE" &>/dev/null; then
   else
     echo "[INFO] Starting ATOMID via docker compose..."
     mkdir -p "$ATOMID_DIR/mysql-volume"
-    chmod a+rw "$ATOMID_DIR/mysql-volume"
+    chmod a+rw "$ATOMID_DIR/mysql-volume" 2>/dev/null || true
     mkdir -p "$ATOMID_DIR/uploads"
     (
       cd "$ATOMID_DIR"

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+  <g id="Group" transform="translate(14) rotate(180)">
+    <rect id="Rectangle" width="14" height="14" transform="translate(14) rotate(180)" fill="none"/>
+    <g id="left" transform="translate(3.5 -1.75)">
+      <path id="Shape" d="M-6.392,10.491a.6.6,0,0,0,.375-.131L-.223,5.7A.6.6,0,0,0,0,5.233a.6.6,0,0,0-.223-.465L-5.992.132a.6.6,0,0,0-.839.092.6.6,0,0,0,.092.839l5.19,4.17-5.216,4.2a.6.6,0,0,0-.092.839A.6.6,0,0,0-6.392,10.491Z" transform="translate(0.012 -0.005) rotate(180)" fill="rgba(0,0,0,0.65)"/>
+    </g>
+  </g>
+</svg>

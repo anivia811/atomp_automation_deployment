@@ -88,7 +88,7 @@ APP_WEBSOCKET_PORT_LIST["studio-web"]=33350
 # External service URL
 ATOM_ID_URL="http://10.42.0.245/atomid"
 DEVICE_FARM_URL="http://10.42.0.245:3700"
-DEVICE_FARM_API_AUTH_KEY="studio-web-1782885942"
+DEVICE_FARM_API_AUTH_KEY="bcdaebbf41fc4fae8ff9397b7305bdf68b4c33405d8043d59290c904e20b65ec"
 AI_SERVER_URL="http://localhost:1337"
 BAMBOO_AUTOEVER_AUTHKEY=""
 # Automation server IPv4 declaration (Private only)

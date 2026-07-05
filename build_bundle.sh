@@ -84,7 +84,7 @@ save_image "devicefarm"      "devicefarm:b-20260703"
 # Base atomid image. The OTP algorithm fix (users.controller.js) and the frontend
 # redirect-loop/cookie fix (public_fixed/) are shipped as separate bind-mounted
 # files below, not baked into this image — see config/atomid/appenv/.
-save_image "atomid"          "atomid/web:b-20260629"
+save_image "atomid"          "atomid/web:b-20260705"
 save_image "mysql-atomid"    "mysql:8.0.34"
 save_image "mysql-df"        "mysql:8.0.24"
 save_image "mysql-auto"      "mysql:8.0.43"

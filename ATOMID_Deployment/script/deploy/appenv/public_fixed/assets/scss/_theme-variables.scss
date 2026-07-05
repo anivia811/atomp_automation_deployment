@@ -1,0 +1,112 @@
+// BOOTSTRAP VARIABLES
+
+//** Background color for `<body>`.
+$body-bg: #fff;
+
+//** Global text color on `<body>`.
+$textColor          : #333;
+
+
+//** Global textual link color.
+
+//** Link hover color set via `darken()` function.
+//$linkColorHover:      darken($linkColor, 15%) !default;
+//** Link hover decoration.
+$link-hover-decoration: underline;
+$font-family-base: 'Roboto',
+sans-serif;
+$FontAwesome: 'FontAwesome';
+
+
+//== Typography
+
+$font-size-base: 0.9rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg: ($font-size-base * 1.25) !default; // 18px
+$font-size-sm: ($font-size-base * .875) !default; // 12px
+
+$h1-font-size: $font-size-base * 2.5 !default; //36px
+$h2-font-size: $font-size-base * 2 !default; // 28px
+$h3-font-size: $font-size-base * 1.75 !default; // 25px
+$h4-font-size: $font-size-base * 1.5 !default;  // 22px
+$h5-font-size: $font-size-base * 1.25 !default; // 18px
+$h6-font-size: $font-size-base !default; // 14px
+
+
+//** By default, this inherits from the `<body>`.
+$headings-font-family:    inherit;
+$headings-font-weight:    500;
+$headings-line-height:    1.1;
+$headings-color:          #333333;
+
+
+
+//== Colors
+//
+//## Gray and brand colors for use across Bootstrap.
+$white :                   #fff !default;
+$gray-base:                #000 !default;
+$color-01:                 #3489af;
+$color-02:                 #206588;
+$color-03:                 #f5f5f5;
+$color-04:                 #ddd;
+$color-05:                 #8f8f8f;
+$color-06:                 rgba(0, 0, 0, 0.2);
+$color-07:                 rgb(37, 37, 37);
+$color-08:                 #aed581;
+$color-09:                 #80cbc4;
+$color-10:                 #66bb6a;
+$color-11:                 #ffe0b2;
+$color-12:                 #b0bec5;
+$color-13:                 #bc4040;
+$color-14:                 #f58220;
+$color-15:                 #ff3547;
+$color-16:                 #333;
+$color-17:                 #49c24f;
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-transitions:                          true !default;
+$enable-prefers-reduced-motion-media-query:   true !default;
+//== Tables
+//
+//## Customizes the `.table` component with basic values, each used across all table variations.
+
+//** Padding for `<th>`s and `<td>`s.
+$table-cell-padding: 8px !default;
+//** Padding for cells in `.table-condensed`.
+$table-condensed-cell-padding: 5px !default;
+
+//** Default background color used for all tables.
+$table-bg: transparent !default;
+//** Background color used for `.table-striped`.
+$table-bg-accent: #f9f9f9 !default;
+//** Background color used for `.table-hover`.
+$table-bg-hover: #f5f5f5 !default;
+$table-bg-active: $table-bg-hover !default;
+
+//** Border color for table and cell borders.
+
+$table-border-color:            #ddd !default;
+$base-border-color:             $color-05 !default;
+$input-color-placeholder:        #999;
+$input-border:                   #ccc;
+
+// END BOOTSTRAP VARIABLES
+
+//== Transition variable
+$transition-base: all 0.2s ease-in-out !default;
+
+//== Font weight variable
+$font-weight-normal : 500 !default;
+
+// THEMES VARIABLES
+
+$background_hover2 : #333;
+$label-sale : #fe5454;
+$label-new : #237cdf;
+// default space between content block
+$content-top-margin: 75px;
+
+
+// END THEMES VARIABLES

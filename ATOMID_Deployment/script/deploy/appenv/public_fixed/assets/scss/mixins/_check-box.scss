@@ -1,0 +1,54 @@
+@mixin check-box-checked {
+  &::after {
+    content: " ";
+    display: block;
+    width: 7px;
+    height: 11px;
+    border: solid $white;
+    border-width: 0 3px 3px 0;
+    position: absolute;
+    left: 8px;
+    top: 40%;
+    margin-top: -2px;
+    transform: rotate(45deg);
+  }
+  &::before {
+    content: " ";
+    display: block;
+    border: solid 0.8em $color-17;
+    border-radius: 0.8em;
+    height: 0;
+    width: 0;
+    position: absolute;
+    left: 0;
+    top: 40%;
+    margin-top: -0.5em;
+  }
+}
+@mixin check-box-unchecked {
+    &::after {
+      content: " ";
+      display: block;
+      width: 7px;
+      height: 11px;
+      border: solid $white;
+      border-width: 0 3px 3px 0;
+      position: absolute;
+      left: 8px;
+      top: 40%;
+      margin-top: -2px;
+      transform: rotate(45deg);
+    }
+    &::before {
+      content: " ";
+      display: block;
+      border: solid 0.8em $color-04;
+      border-radius: 0.8em;
+      height: 0;
+      width: 0;
+      position: absolute;
+      left: 0;
+      top: 40%;
+      margin-top: -0.5em;
+    }
+  }

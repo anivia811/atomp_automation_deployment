@@ -1,5 +1,17 @@
 version: "2.4"
 
+# Fixed subnet for the project's default network — pinned here (not
+# pre-created by a script) so Compose owns it with its own labels and
+# recognizes it as "its" network on every run, instead of colliding with a
+# manually-created network of the same name/subnet.
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
+
 services:
   rethinkdb:
     image: rethinkdb:latest
@@ -357,6 +369,46 @@ services:
       --stream-gate-device-pattern "ws://10.42.0.245:8180/dv"
       --using-stream-gate true
       --using-appium false
+      --appium-config ""
+      --screen-jpeg-quality 80
+      --fps 10
+      --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc"
+
+  # Real Android device provider (ADB-based) — separate from provider-linux
+  # above, which only manages SSH-based virtual "Host Units" and cannot see
+  # physical USB devices. The devicefarm image already bundles its own adb
+  # binary and Node adb client (adbkit), so no host-level adb/Android Studio
+  # install is needed anywhere — network_mode: host + privileged + the usb
+  # bus mount are the only requirements, and they're already set below.
+  provider-android:
+    image: ${DEVICEFARM_IMAGE}
+    container_name: provider-android
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./kconfig:/config
+      - /dev/bus/usb:/dev/bus/usb
+    command: >
+      stf provider
+      --name "android-${DOMAIN}"
+      --location "androidlocal"
+      --local-ip ${DOMAIN}
+      --connect-sub tcp://${DOMAIN}:7250
+      --connect-push tcp://${DOMAIN}:7270
+      --storage-url http://${DOMAIN}:3500
+      --storage-permanent-url http://${DOMAIN}:4200
+      --provider-storage-url http://${DOMAIN}:3500/storage/upload
+      --min-port 12000
+      --max-port 13000
+      --heartbeat-interval 10000
+      --screen-ws-url-pattern "ws://${DOMAIN}:8180/d/androidlocal/<%= serial %>/<%= publicPort %>/"
+      --stream-gate-client-pattern "ws://${DOMAIN}:8180/c"
+      --stream-gate-device-pattern "ws://${DOMAIN}:8180/dv"
+      --stream-gate-audio-client-pattern "ws://${DOMAIN}:8180/c-audio"
+      --stream-gate-audio-device-pattern "ws://${DOMAIN}:8180/dv-audio"
+      --using-stream-gate true
+      --using-appium true
+      --appium-url "${DOMAIN}:4723"
       --appium-config ""
       --screen-jpeg-quality 80
       --fps 10

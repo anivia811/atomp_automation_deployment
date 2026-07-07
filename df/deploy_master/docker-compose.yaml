@@ -107,7 +107,7 @@ services:
       --connect-sub-dev tcp://triproxy-dev:7250 
       --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc" 
       --list-company-api "${LIST_COMPANY_API}" 
-      --external-storage-url "https://10.5.191.174/storage/upload" 
+      --external-storage-url "${EXTERNAL_STORAGE_URL}"
       --storage-url ${STORAGE_URL}
       --list-user-api ${LIST_USER_API}
   app:

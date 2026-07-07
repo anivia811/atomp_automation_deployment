@@ -1,11 +1,24 @@
 # Known patches in devicefarm / atomid images (pre-rebuild snapshot, 2026-07-05)
 
-These two images were built by patching a **running container** and `docker commit`-ing it,
-not from a Dockerfile in this repo — `build_image/build_image.sh` even has both explicitly
-disabled (`SERVICE_APP_NAMES["devicefarm"]=0`, `["atomid-web"]=0`). There is no confirmed
-guarantee these fixes are present in the `atom-device-farm` / `atom-id` git history. Recorded
-here before deleting the images so the specific behavior can be re-verified (or the fix
-reapplied) after rebuilding from source.
+**Update (2026-07-06): devicefarm now has a working rebuild path — see below.** This file's
+original premise (both images only existed as `docker commit`-patched containers with no
+confirmed fix in git) turned out to be wrong for devicefarm: `atom-device-farm`'s own repo
+root has a self-contained `Dockerfile` (added by commit `6ff9fc11a` "Upgrade Container and
+nodejs — Fix OSS Issue") that installs Node 24 fresh from nodejs.org and `npm install`s from
+the network — it does not use `df-base`/offline `ubuntu_nodemodule` at all. Diffing
+`devicefarm:b-20260703`'s actual layer history (`docker history --no-trunc`) against this
+Dockerfile confirms the running image WAS built from it, and all patches below (redis NX,
+socket.io namespace, session cookie secure, loadUser/company_id) are already committed on
+top of that same commit (`e7553dc59`, `6bf6e9598`, `ebd4e5da7`, `ffeabc9b4`) — no manual
+re-patching needed. `start_all.sh` now builds devicefarm the same way it builds atomid:
+`docker build -t devicefarm:b-$(date +%Y%m%d) atom-device-farm/`, then syncs the new tag into
+`build_bundle.sh`/`bundle/start_all.sh`/`df/deploy_master/config.sh`. Verified the rebuilt
+image matches the running one: same Node v24.16.0, same `vendor/*` layout (added
+`vendor/nodejs/` to `atom-device-farm/.dockerignore` since the running container never had
+it — it's only used by provider-linux's unrelated SSH shell-server feature), same
+pre-built `res/statistical/dist`, final size 3.01GB vs the running image's 2.91GB.
+
+The atomid section below is unrelated and still describes a real gap for that image.
 
 Pre-rebuild image reference: `devicefarm:b-20260703` (id `c544d8ac65a1`, built 2026-07-03),
 `atomid/web:b-20260629` (id `b2932ba0d096`, built 2026-06-29).

@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-# build_bundle.sh — Pack all ATOMP services into a portable atomp-bundle.tar.gz
-# Run this on the source server. The output can be extracted and run on any
-# Linux / WSL machine with Docker installed.
+# build_bundle.sh — Stage all ATOMP services into ./atomp-bundle/ (images,
+# configs, Appium source, start/stop scripts). This is the fast, local-run
+# path used by start_all.sh on every invocation — it does NOT create the
+# portable atomp-bundle.tar.gz archive.
+#
+# To produce a tar.gz for shipping to another machine, run pack_bundle.sh
+# separately after this (or after start_all.sh) — packing is slow (has to
+# read the multi-GB data/ dir) and previously ran on every start_all.sh call
+# for no reason, so it's now a separate, opt-in step.
 #
 # Usage:  bash build_bundle.sh [--skip-images]
 #
@@ -80,11 +86,11 @@ log "Saving images..."
 #   - vendor/STFService, vendor/appium, etc. (real device + Appium support, was missing)
 #   - statistical/report Angular app build
 # Used for ALL device farm services (app, api, websocket, processor, provider, provider-android, etc.)
-save_image "devicefarm"      "devicefarm:b-20260703"
+save_image "devicefarm"      "devicefarm:b-20260707"
 # Base atomid image. The OTP algorithm fix (users.controller.js) and the frontend
 # redirect-loop/cookie fix (public_fixed/) are shipped as separate bind-mounted
 # files below, not baked into this image — see config/atomid/appenv/.
-save_image "atomid"          "atomid/web:b-20260705"
+save_image "atomid"          "atomid/web:b-20260707"
 save_image "mysql-atomid"    "mysql:8.0.34"
 save_image "mysql-df"        "mysql:8.0.24"
 save_image "mysql-auto"      "mysql:8.0.43"
@@ -352,19 +358,13 @@ README
 
 ok "README written"
 
-# ─── Pack ──────────────────────────────────────────────────────────────────────
-hr
-log "Packing atomp-bundle.tar.gz..."
-tar czf "$SCRIPT_DIR/atomp-bundle.tar.gz" -C "$SCRIPT_DIR" atomp-bundle/
-log "Done!"
 echo ""
-log "Bundle:      $SCRIPT_DIR/atomp-bundle.tar.gz"
-log "Bundle size: $(du -sh "$SCRIPT_DIR/atomp-bundle.tar.gz" | cut -f1)"
-log "Bundle dir:  $(du -sh "$BUNDLE" | cut -f1)"
+log "Bundle staged at: $BUNDLE"
+log "Bundle dir size:  $(du -sh "$BUNDLE" | cut -f1)"
 echo ""
 hr
 echo ""
-echo "  To deploy on another machine:"
-echo "    scp atomp-bundle.tar.gz user@host:~/"
-echo "    ssh user@host 'tar xzf atomp-bundle.tar.gz && cd atomp-bundle && bash start_all.sh'"
+echo "  Stack can now be started directly from $BUNDLE (bash start_all.sh already does this)."
+echo "  To also produce a portable atomp-bundle.tar.gz for another machine, run:"
+echo "    bash pack_bundle.sh"
 echo ""

@@ -44,15 +44,25 @@ for f in "$SCRIPT_DIR/build_bundle.sh" "$SCRIPT_DIR/bundle/start_all.sh" \
   sed -i -E "s|atomid/web:b-[0-9]{8}|$ATOMID_TAG|g" "$f"
 done
 
-hr; log "3/4  devicefarm — no rebuild path exists yet"
-# atom-device-farm's package.json now requires Node >=24 (OSS-upgrade commit),
-# but the only working build (df-base:2026feb12) has Node 8, and the source
-# tree is missing the offline node_modules the Dockerfile expects. Until one
-# of those is fixed, we just reuse whatever devicefarm image is already local.
-if ! docker image inspect devicefarm:b-20260703 >/dev/null 2>&1; then
-  die "devicefarm:b-20260703 not found locally — restore it (see KNOWN_IMAGE_PATCHES.md) before continuing"
-fi
-log "  reusing existing devicefarm:b-20260703"
+hr; log "3/4  Building devicefarm from atom-device-farm"
+# atom-device-farm now ships its own self-contained root Dockerfile (added by
+# the "Upgrade Container and nodejs" commit): it installs Node 24 straight
+# from nodejs.org and npm-installs from the network, so it does NOT depend on
+# df-base or the old offline ubuntu_nodemodule bundle the previous
+# (deployment-repo-local) Dockerfile required. Confirmed this reproduces the
+# same Node version / vendor layout / statistical dist as the currently
+# running devicefarm:b-20260703 container.
+DEVICEFARM_SRC="$ROOT_DIR/atom-device-farm"
+[ -d "$DEVICEFARM_SRC" ] || die "atom-device-farm not found at $DEVICEFARM_SRC"
+DEVICEFARM_TAG="devicefarm:b-$(date +%Y%m%d)"
+docker build -t "$DEVICEFARM_TAG" "$DEVICEFARM_SRC"
+log "  built $DEVICEFARM_TAG"
+
+log "  syncing the new tag into build_bundle.sh, bundle/start_all.sh, and config.sh"
+for f in "$SCRIPT_DIR/build_bundle.sh" "$SCRIPT_DIR/bundle/start_all.sh" \
+         "$SCRIPT_DIR/df/deploy_master/config.sh"; do
+  sed -i -E "s|devicefarm:b-[0-9]{8}|$DEVICEFARM_TAG|g" "$f"
+done
 
 hr; log "4/4  Refreshing the bundle and starting the stack"
 bash "$SCRIPT_DIR/build_bundle.sh"

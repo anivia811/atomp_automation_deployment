@@ -362,6 +362,7 @@ services:
   provider:
     image: ${DEVICEFARM_IMAGE}
     container_name: provider
+    restart: always
     privileged: true
     network_mode: host
     volumes:
@@ -398,6 +399,7 @@ services:
   provider-android:
     image: ${DEVICEFARM_IMAGE}
     container_name: provider-android
+    restart: always
     privileged: true
     network_mode: host
     volumes:

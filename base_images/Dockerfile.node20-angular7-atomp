@@ -1,0 +1,16 @@
+# Reconstructed from `docker history node:20-angular7-atomp` — this tag was
+# never on Docker Hub, it only existed as a local image, which broke
+# `docker build` for tester40-client on any machine that hadn't built it before.
+FROM node:20-bookworm-slim
+
+RUN apt-get update && apt-get install -y \
+      gettext-base \
+      zip \
+      unzip \
+      build-essential \
+      python3 && \
+    ln -sf /usr/bin/python3 /usr/local/bin/python && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g @angular/cli@7 --legacy-peer-deps
+RUN npm install -g sass --legacy-peer-deps

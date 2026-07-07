@@ -49,8 +49,8 @@ load_image() {
   ok "$tag loaded"
 }
 
-load_image "devicefarm"      "devicefarm:b-20260703"
-load_image "atomid"          "atomid/web:b-20260705"
+load_image "devicefarm"      "devicefarm:b-20260707"
+load_image "atomid"          "atomid/web:b-20260707"
 load_image "mysql-atomid"    "mysql:8.0.34"
 load_image "mysql-df"        "mysql:8.0.24"
 load_image "mysql-auto"      "mysql:8.0.43"
@@ -370,7 +370,7 @@ recreate_container tester40-web \
   -e TESTER40_ATOMID_HOST="$ATOM_ID_URL" \
   -e TESTER40_PUBLIC_HOST="$NGINX_SERVER_URL" \
   -e TESTER40_STORAGE_API_HOST_FULL_PATH="$STORAGE_PRIVATE/storage" \
-  -e TESTER40_STORAGE_API_HOST_INTERNAL_PATH=localhost \
+  -e TESTER40_STORAGE_API_HOST_INTERNAL_PATH="$STORAGE_PRIVATE" \
   -e TESTER40_TASKER_HOST="$TASKER_PRIVATE" \
   -e TESTER40_STUDIO_API_HOST="$STUDIO_PRIVATE" \
   -e TESTER40_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \

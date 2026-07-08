@@ -7,7 +7,7 @@ build_image/*
 # MySQL / data volumes
 **/mysql-volume/
 app_data/
-atomp-bundle/images/
+atomp-bundle/
 atomp-bundle.tar.gz
 tester40-client.tar.gz
 atomp-fixes/

@@ -1,0 +1,707 @@
+2026-07-05T00:18:50.884383669 0.009755s notice: Recursively removing directory /data/rethinkdb_data/tmp
+2026-07-05T00:18:50.897753188 0.023118s notice: Initializing directory /data/rethinkdb_data
+2026-07-05T00:18:50.897806158 0.023171s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/data/rethinkdb_data' did not already exist or is empty.)
+2026-07-05T00:18:50.897820277 0.023185s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-05T00:18:50.898855599 0.024220s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-05T00:18:50.898862188 0.024227s notice: Loading data from directory /data/rethinkdb_data
+2026-07-05T00:18:50.942946409 0.068311s info: Cache size is set to 2048 MB
+2026-07-05T00:18:50.943483752 0.068848s notice: Listening for intracluster connections on port 29015
+2026-07-05T00:18:50.945047573 0.070412s notice: Listening for client driver connections on port 28015
+2026-07-05T00:18:50.945067251 0.070432s notice: Listening for administrative HTTP connections on port 8080
+2026-07-05T00:18:50.945068297 0.070433s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.7, ::1
+2026-07-05T00:18:50.945069236 0.070434s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.7, ::1
+2026-07-05T00:18:50.945070205 0.070435s notice: Listening on http addresses: 127.0.0.1, 172.21.0.7, ::1
+2026-07-05T00:18:50.945071180 0.070436s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-05T00:18:52.034671521 1.160036s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.038689894 1.164055s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.038700502 1.164065s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.038705265 1.164070s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.040254484 1.165619s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Added replica on this server.
+2026-07-05T00:18:52.040263711 1.165628s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.040264922 1.165630s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.043080727 1.168445s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Added replica on this server.
+2026-07-05T00:18:52.043149411 1.168514s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Added replica on this server.
+2026-07-05T00:18:52.043267512 1.168632s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Added replica on this server.
+2026-07-05T00:18:52.043348462 1.168713s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Added replica on this server.
+2026-07-05T00:18:52.043470933 1.168835s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Added replica on this server.
+2026-07-05T00:18:52.043475317 1.168840s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 1.
+2026-07-05T00:18:52.043592436 1.168957s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Added replica on this server.
+2026-07-05T00:18:52.054541736 1.179906s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:52.061858107 1.187223s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:52.069624721 1.194989s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:52.076654085 1.202019s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:52.085601748 1.210967s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:52.093507894 1.218873s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:52.100717508 1.226082s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 1. Latest log index is 0.
+2026-07-05T00:18:53.188451189 2.313816s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T00:18:53.226948460 2.352313s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T00:18:53.228590711 2.353955s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T00:18:53.423383412 2.548748s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T00:18:53.423493883 2.548859s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T00:18:53.423569097 2.548934s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T00:18:53.423851577 2.549216s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T00:18:53.424135084 2.549500s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T00:18:53.430059520 2.555424s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.430103996 2.555468s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.430239524 2.555604s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.430389243 2.555754s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.430559311 2.555924s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.430983504 2.556348s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.431363768 2.556728s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.431583746 2.556948s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.431730969 2.557095s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.432125673 2.557491s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T00:18:53.440305892 2.565671s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T00:18:53.440733970 2.566098s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T00:18:53.441318410 2.566683s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T00:18:53.452090695 2.577455s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T01:39:28.001455861 4837.126820s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T01:39:28.001509077 4837.126874s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T01:39:28.001619970 4837.126984s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T01:39:28.001621945 4837.126986s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T01:39:28.002119891 4837.127484s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T01:39:28.002123106 4837.127487s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T01:39:28.002124264 4837.127489s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T01:39:28.002125417 4837.127490s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T01:39:28.002127255 4837.127492s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T01:39:28.002451716 4837.127816s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T01:39:28.002455272 4837.127820s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T01:39:28.002457212 4837.127822s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T01:39:28.002634176 4837.127999s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002635748 4837.128000s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002636118 4837.128000s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002637262 4837.128002s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002637668 4837.128002s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002647548 4837.128012s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002648870 4837.128013s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002650292 4837.128015s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002650662 4837.128015s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T01:39:28.002672419 4837.128037s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:13:18.416657014 17667.542022s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-05T05:13:18.416835250 17667.542200s notice: Shutting down client connections...
+2026-07-05T05:13:18.416915432 17667.542280s notice: All client connections closed.
+2026-07-05T05:13:18.416918512 17667.542283s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-05T05:13:18.432597988 17667.557963s notice: Storage engine shut down.
+2026-07-05T05:34:08.953813144 0.021949s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-05T05:34:08.957287503 0.025423s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-05T05:34:08.957314418 0.025450s notice: Loading data from directory /data/rethinkdb_data
+2026-07-05T05:34:08.976238884 0.044374s info: Cache size is set to 2048 MB
+2026-07-05T05:34:08.977729383 0.045865s notice: Listening for intracluster connections on port 29015
+2026-07-05T05:34:09.088957547 0.157093s notice: Listening for client driver connections on port 28015
+2026-07-05T05:34:09.088993148 0.157128s notice: Listening for administrative HTTP connections on port 8080
+2026-07-05T05:34:09.088995208 0.157130s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.10, ::1
+2026-07-05T05:34:09.088999497 0.157135s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.10, ::1
+2026-07-05T05:34:09.089006188 0.157141s notice: Listening on http addresses: 127.0.0.1, 172.21.0.10, ::1
+2026-07-05T05:34:09.089007863 0.157143s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-05T05:34:10.064704635 1.132840s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 2.
+2026-07-05T05:34:10.071611449 1.139747s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 2. Latest log index is 6.
+2026-07-05T05:34:10.111729135 1.179865s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 2.
+2026-07-05T05:34:10.112840478 1.180976s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 2.
+2026-07-05T05:34:10.117485476 1.185621s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 2. Latest log index is 8.
+2026-07-05T05:34:10.122502859 1.190638s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 2. Latest log index is 3.
+2026-07-05T05:34:10.168434452 1.236570s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T05:34:10.168520624 1.236656s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T05:34:10.168522060 1.236657s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T05:34:10.168525173 1.236660s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T05:34:10.168527055 1.236662s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T05:34:10.168593372 1.236728s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T05:34:10.168613857 1.236749s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T05:34:10.168692957 1.236828s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T05:34:10.217535545 1.285671s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 2.
+2026-07-05T05:34:10.223569555 1.291705s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 2. Latest log index is 5.
+2026-07-05T05:34:10.511746381 1.579882s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 2.
+2026-07-05T05:34:10.542602521 1.610738s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 2.
+2026-07-05T05:34:10.593467824 1.661603s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 2. Latest log index is 13.
+2026-07-05T05:34:10.598669714 1.666805s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 2. Latest log index is 4.
+2026-07-05T05:34:10.843215196 1.911351s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T05:34:10.843363256 1.911499s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T05:34:10.843369086 1.911504s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T05:34:10.844229590 1.912365s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844402035 1.912537s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844587727 1.912723s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844593666 1.912729s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844627612 1.912763s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844647681 1.912783s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844653524 1.912789s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844657477 1.912793s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844658874 1.912794s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.844703608 1.912839s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T05:34:10.904311991 1.972448s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 2.
+2026-07-05T05:34:11.026569418 2.094705s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 2. Latest log index is 4.
+2026-07-05T05:34:11.855414966 2.923550s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T06:03:45.359429538 1776.427565s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T06:03:45.359720542 1776.427856s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T06:03:45.359803445 1776.427939s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:03:45.359805660 1776.427941s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:03:45.360424682 1776.428560s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:03:45.360485108 1776.428620s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:03:45.360494632 1776.428630s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:03:45.360497193 1776.428632s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:03:45.360499740 1776.428635s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:03:45.360718069 1776.428853s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:03:45.360720773 1776.428856s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:03:45.360723342 1776.428858s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:03:45.361150155 1776.429285s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361267859 1776.429403s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361283560 1776.429419s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361299853 1776.429435s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361315212 1776.429450s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361330505 1776.429466s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361337362 1776.429472s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361345105 1776.429480s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361353360 1776.429488s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:03:45.361361022 1776.429496s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.541672537 2165.609808s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T06:10:14.541742507 2165.609878s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T06:10:14.541790858 2165.609926s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:10:14.541793868 2165.609929s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:10:14.542386431 2165.610522s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:10:14.542390297 2165.610525s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:10:14.542392300 2165.610527s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:10:14.542397921 2165.610533s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:10:14.542401105 2165.610536s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:10:14.542556289 2165.610691s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:10:14.542596900 2165.610732s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:10:14.542601603 2165.610737s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:10:14.542836342 2165.610971s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542873517 2165.611009s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542898792 2165.611034s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542901627 2165.611037s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542902102 2165.611037s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542904006 2165.611039s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542926013 2165.611061s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542930126 2165.611065s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542937340 2165.611072s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:10:14.542972902 2165.611108s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.460757257 2405.528892s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T06:14:14.460798952 2405.528934s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T06:14:14.461040399 2405.529176s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:14:14.461043099 2405.529178s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:14:14.461381575 2405.529517s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:14:14.461383438 2405.529519s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:14:14.461384620 2405.529520s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:14:14.461386515 2405.529522s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:14:14.461423729 2405.529559s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:14:14.461468571 2405.529604s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:14:14.461470527 2405.529606s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:14:14.461473389 2405.529608s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:14:14.461989958 2405.530125s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462006867 2405.530142s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462018828 2405.530154s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462038641 2405.530174s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462039061 2405.530174s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462060644 2405.530196s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462068675 2405.530204s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462073571 2405.530209s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462074724 2405.530210s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:14:14.462083580 2405.530219s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.660138908 3380.728274s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T06:30:29.660483353 3380.728618s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T06:30:29.660537027 3380.728672s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:30:29.660539560 3380.728675s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:30:29.660908967 3380.729044s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:30:29.660910144 3380.729045s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:30:29.660911417 3380.729046s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:30:29.660912558 3380.729048s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:30:29.660927203 3380.729062s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:30:29.660981150 3380.729116s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:30:29.660984654 3380.729120s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:30:29.660986518 3380.729122s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:30:29.661568914 3380.729704s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661602966 3380.729738s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661606917 3380.729742s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661607620 3380.729743s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661609437 3380.729745s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661610668 3380.729746s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661612418 3380.729748s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661613005 3380.729748s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661629639 3380.729765s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:30:29.661633620 3380.729769s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.707578952 4297.775714s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T06:45:46.707687661 4297.775823s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T06:45:46.707694423 4297.775829s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:45:46.707697677 4297.775833s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T06:45:46.708288956 4297.776424s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:45:46.708292285 4297.776427s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:45:46.708294013 4297.776429s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:45:46.708295760 4297.776431s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:45:46.708298416 4297.776434s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T06:45:46.708460359 4297.776596s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:45:46.708466498 4297.776602s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:45:46.708469532 4297.776605s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T06:45:46.708572881 4297.776708s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708815088 4297.776950s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708832097 4297.776967s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708836363 4297.776971s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708838578 4297.776974s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708840500 4297.776976s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708841224 4297.776976s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708843121 4297.776978s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708927591 4297.777063s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T06:45:46.708930804 4297.777066s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.227481494 5755.295617s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T07:10:04.227703868 5755.295839s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T07:10:04.227706913 5755.295842s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T07:10:04.227708774 5755.295844s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T07:10:04.228072520 5755.296208s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T07:10:04.228074326 5755.296209s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T07:10:04.228075435 5755.296210s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T07:10:04.228077255 5755.296212s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T07:10:04.228108685 5755.296244s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T07:10:04.228477230 5755.296612s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T07:10:04.228480211 5755.296615s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T07:10:04.228484507 5755.296620s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T07:10:04.228590202 5755.296725s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228619282 5755.296755s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228622095 5755.296757s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228623369 5755.296758s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228623722 5755.296759s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228638905 5755.296774s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228639338 5755.296774s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228640436 5755.296775s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228668874 5755.296804s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T07:10:04.228684315 5755.296819s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:08.850672883 8879.918808s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-05T08:02:08.850835767 8879.918971s notice: Shutting down client connections...
+2026-07-05T08:02:08.850910309 8879.919046s notice: All client connections closed.
+2026-07-05T08:02:08.850914198 8879.919049s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-05T08:02:08.869294813 8879.937431s notice: Storage engine shut down.
+2026-07-05T08:02:33.588070798 0.086869s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-05T08:02:33.608259109 0.107059s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-05T08:02:33.608351475 0.107150s notice: Loading data from directory /data/rethinkdb_data
+2026-07-05T08:02:33.709565616 0.208364s info: Cache size is set to 2048 MB
+2026-07-05T08:02:33.710984034 0.209782s notice: Listening for intracluster connections on port 29015
+2026-07-05T08:02:34.141934047 0.640732s notice: Listening for client driver connections on port 28015
+2026-07-05T08:02:34.141979942 0.640778s notice: Listening for administrative HTTP connections on port 8080
+2026-07-05T08:02:34.141983723 0.640781s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.2, ::1
+2026-07-05T08:02:34.141985492 0.640783s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.2, ::1
+2026-07-05T08:02:34.141994785 0.640792s notice: Listening on http addresses: 127.0.0.1, 172.21.0.2, ::1
+2026-07-05T08:02:34.141996561 0.640794s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-05T08:02:35.095564713 1.594363s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 3.
+2026-07-05T08:02:35.157376230 1.656174s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 3. Latest log index is 8.
+2026-07-05T08:02:35.214477050 1.713275s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 3.
+2026-07-05T08:02:35.339782692 1.838581s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 3. Latest log index is 11.
+2026-07-05T08:02:35.365740693 1.864539s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 3.
+2026-07-05T08:02:35.570125442 2.068923s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 3. Latest log index is 16.
+2026-07-05T08:02:35.603687878 2.102486s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 3.
+2026-07-05T08:02:35.649099195 2.147897s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 3.
+2026-07-05T08:02:35.779637674 2.278436s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 3. Latest log index is 7.
+2026-07-05T08:02:35.800738768 2.299537s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 3.
+2026-07-05T08:02:35.881376924 2.380175s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 3. Latest log index is 8.
+2026-07-05T08:02:36.136518058 2.635316s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 3.
+2026-07-05T08:02:36.155309893 2.654108s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 3. Latest log index is 9.
+2026-07-05T08:02:36.754687622 3.253486s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T08:02:36.754781881 3.253580s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T08:02:36.754826214 3.253624s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T08:02:36.754832798 3.253630s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T08:02:36.755021393 3.253819s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:02:36.755053184 3.253851s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:02:36.755061160 3.253859s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:02:36.755124494 3.253922s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:02:36.755130302 3.253928s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:02:36.755344217 3.254142s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T08:02:36.755370805 3.254169s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T08:02:36.755424470 3.254222s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T08:02:36.755701750 3.254500s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755738645 3.254536s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755750049 3.254548s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755767279 3.254565s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755798953 3.254597s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755837993 3.254636s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755855492 3.254653s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755857755 3.254655s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755859958 3.254658s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:36.755862333 3.254660s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:02:37.508098941 4.006897s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 3. Latest log index is 6.
+2026-07-05T08:07:07.932533984 274.431332s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-05T08:07:07.932752327 274.431550s notice: Shutting down client connections...
+2026-07-05T08:07:07.932874828 274.431673s notice: All client connections closed.
+2026-07-05T08:07:07.932878455 274.431676s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-05T08:07:07.951161669 274.449960s notice: Storage engine shut down.
+2026-07-05T08:46:14.660438507 0.037948s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-05T08:46:14.662929121 0.040439s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-05T08:46:14.662980914 0.040490s notice: Loading data from directory /data/rethinkdb_data
+2026-07-05T08:46:14.685999970 0.063510s info: Cache size is set to 2048 MB
+2026-07-05T08:46:14.687594762 0.065104s notice: Listening for intracluster connections on port 29015
+2026-07-05T08:46:14.766099978 0.143610s notice: Listening for client driver connections on port 28015
+2026-07-05T08:46:14.766155727 0.143665s notice: Listening for administrative HTTP connections on port 8080
+2026-07-05T08:46:14.766162365 0.143672s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.2, ::1
+2026-07-05T08:46:14.766166664 0.143676s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.2, ::1
+2026-07-05T08:46:14.766180197 0.143690s notice: Listening on http addresses: 127.0.0.1, 172.21.0.2, ::1
+2026-07-05T08:46:14.766185103 0.143695s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-05T08:46:16.109122286 1.486632s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.114772927 1.492282s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 4. Latest log index is 15.
+2026-07-05T08:46:16.206616508 1.584126s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:46:16.206620672 1.584130s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:46:16.206621885 1.584131s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:46:16.206623775 1.584133s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:46:16.206625666 1.584135s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-05T08:46:16.452315057 1.829825s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.458361713 1.835871s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.458388855 1.835898s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 4. Latest log index is 20.
+2026-07-05T08:46:16.463524813 1.841034s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 4. Latest log index is 13.
+2026-07-05T08:46:16.484786022 1.862296s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.495356458 1.872866s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 4. Latest log index is 12.
+2026-07-05T08:46:16.506053510 1.883563s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-05T08:46:16.506742142 1.884252s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T08:46:16.506781733 1.884291s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T08:46:16.506808225 1.884318s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-05T08:46:16.508382986 1.885892s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508528065 1.886038s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508596209 1.886106s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508597745 1.886107s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508618316 1.886128s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508624396 1.886134s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508625749 1.886135s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508646858 1.886156s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508662634 1.886172s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.508668328 1.886178s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-05T08:46:16.537190402 1.914700s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.542639457 1.920149s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 4. Latest log index is 10.
+2026-07-05T08:46:16.600082528 1.977592s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.605246614 1.982756s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 4. Latest log index is 11.
+2026-07-05T08:46:16.701282260 2.078792s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 4.
+2026-07-05T08:46:16.889137785 2.266648s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 4. Latest log index is 12.
+2026-07-05T08:46:16.956234919 2.333745s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-05T08:46:16.956653936 2.334164s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-05T08:46:16.956663556 2.334173s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-06T01:48:06.300836471 10691.465203s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-06T01:48:06.301102459 10691.465469s notice: Shutting down client connections...
+2026-07-06T01:48:06.301197378 10691.465564s notice: All client connections closed.
+2026-07-06T01:48:06.301200071 10691.465566s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-06T01:48:06.324521445 10691.488888s notice: Storage engine shut down.
+2026-07-06T02:22:30.556493761 0.079368s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-06T02:22:30.562176686 0.085052s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-06T02:22:30.562228099 0.085102s notice: Loading data from directory /data/rethinkdb_data
+2026-07-06T02:22:30.582196916 0.105071s info: Cache size is set to 2048 MB
+2026-07-06T02:22:30.582672671 0.105546s notice: Listening for intracluster connections on port 29015
+2026-07-06T02:22:30.666457543 0.189331s notice: Listening for client driver connections on port 28015
+2026-07-06T02:22:30.666482107 0.189356s notice: Listening for administrative HTTP connections on port 8080
+2026-07-06T02:22:30.666482366 0.189356s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.9, ::1
+2026-07-06T02:22:30.666482670 0.189356s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.9, ::1
+2026-07-06T02:22:30.666498818 0.189372s notice: Listening on http addresses: 127.0.0.1, 172.21.0.9, ::1
+2026-07-06T02:22:30.666504313 0.189378s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-06T02:22:31.656576798 1.179451s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 5.
+2026-07-06T02:22:31.664255461 1.187129s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 5. Latest log index is 18.
+2026-07-06T02:22:31.832463694 1.355338s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T02:22:31.832662157 1.355536s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T02:22:31.832664958 1.355539s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T02:22:31.832671107 1.355545s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T02:22:31.832902529 1.355776s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T02:22:31.882718879 1.405593s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 5.
+2026-07-06T02:22:31.914048169 1.436922s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 5.
+2026-07-06T02:22:31.969333812 1.492208s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 5. Latest log index is 15.
+2026-07-06T02:22:31.979690076 1.502564s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 5. Latest log index is 14.
+2026-07-06T02:22:31.986194211 1.509068s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 5.
+2026-07-06T02:22:32.001453470 1.524327s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 5. Latest log index is 14.
+2026-07-06T02:22:32.182748305 1.705622s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 5.
+2026-07-06T02:22:32.202447209 1.725321s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 5.
+2026-07-06T02:22:32.287578213 1.810452s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 5. Latest log index is 17.
+2026-07-06T02:22:32.309660032 1.832534s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 5. Latest log index is 15.
+2026-07-06T02:22:32.408145487 1.931019s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 5.
+2026-07-06T02:22:32.506642331 2.029516s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-06T02:22:32.506774743 2.029648s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-06T02:22:32.506982744 2.029857s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-06T02:22:32.507030591 2.029904s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-06T02:22:32.507691734 2.030566s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-06T02:22:32.507899085 2.030773s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-06T02:22:32.507961661 2.030835s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-06T02:22:32.518603442 2.041477s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 5. Latest log index is 23.
+2026-07-06T02:22:33.520182820 3.043057s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520729777 3.043604s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520767587 3.043641s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520770460 3.043644s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520774650 3.043648s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520776122 3.043650s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520780136 3.043654s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520784238 3.043658s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520785618 3.043659s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:22:33.520813264 3.043687s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T02:41:54.402398818 1163.925273s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-06T02:41:54.402523651 1163.925397s notice: Shutting down client connections...
+2026-07-06T02:41:54.402619398 1163.925493s notice: All client connections closed.
+2026-07-06T02:41:54.402623083 1163.925497s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-06T02:41:54.411928274 1163.934802s notice: Storage engine shut down.
+2026-07-06T04:11:07.771862153 0.021691s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-06T04:11:07.775018060 0.024848s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-06T04:11:07.775071268 0.024900s notice: Loading data from directory /data/rethinkdb_data
+2026-07-06T04:11:07.791886407 0.041715s info: Cache size is set to 2048 MB
+2026-07-06T04:11:07.794159043 0.043988s notice: Listening for intracluster connections on port 29015
+2026-07-06T04:11:07.874261671 0.124090s notice: Listening for client driver connections on port 28015
+2026-07-06T04:11:07.874310113 0.124139s notice: Listening for administrative HTTP connections on port 8080
+2026-07-06T04:11:07.874313048 0.124141s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.3, ::1
+2026-07-06T04:11:07.874343599 0.124172s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.3, ::1
+2026-07-06T04:11:07.874346514 0.124175s notice: Listening on http addresses: 127.0.0.1, 172.21.0.3, ::1
+2026-07-06T04:11:07.874351333 0.124180s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-06T04:11:08.880462584 1.130291s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 6.
+2026-07-06T04:11:08.893639317 1.143468s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 6. Latest log index is 18.
+2026-07-06T04:11:09.026437941 1.276266s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 6.
+2026-07-06T04:11:09.033584754 1.283413s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 6. Latest log index is 17.
+2026-07-06T04:11:09.087196809 1.337025s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 6.
+2026-07-06T04:11:09.092272487 1.342101s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 6. Latest log index is 17.
+2026-07-06T04:11:09.246914244 1.496743s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-06T04:11:09.247010681 1.496839s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-06T04:11:09.247017455 1.496846s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-06T04:11:09.459686348 1.709515s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 6.
+2026-07-06T04:11:09.475289416 1.725118s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 6. Latest log index is 21.
+2026-07-06T04:11:09.503308168 1.753137s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 6.
+2026-07-06T04:11:09.508003457 1.757832s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 6. Latest log index is 18.
+2026-07-06T04:11:09.546582894 1.796412s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-06T04:11:09.547708989 1.797538s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T04:11:09.547718877 1.797547s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T04:11:09.547878018 1.797706s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T04:11:09.547884670 1.797713s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T04:11:09.547890424 1.797719s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-06T04:11:09.679457217 1.929286s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 6.
+2026-07-06T04:11:09.686721826 1.936551s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 6. Latest log index is 26.
+2026-07-06T04:11:09.844211774 2.094040s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 6.
+2026-07-06T04:11:09.892593208 2.142422s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 6. Latest log index is 20.
+2026-07-06T04:11:09.997743891 2.247573s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-06T04:11:09.997780056 2.247608s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-06T04:11:09.997809733 2.247638s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-06T04:11:09.998061608 2.247890s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998110195 2.247939s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998142438 2.247971s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998203920 2.248032s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998250413 2.248079s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998328196 2.248157s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998343269 2.248172s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998344325 2.248173s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998426375 2.248255s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-06T04:11:09.998434490 2.248263s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:20:17.429427914 79749.679257s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-07T02:20:17.429552578 79749.679381s notice: Shutting down client connections...
+2026-07-07T02:20:17.432231217 79749.682060s notice: All client connections closed.
+2026-07-07T02:20:17.432236265 79749.682065s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-07T02:20:17.451073008 79749.700902s notice: Storage engine shut down.
+2026-07-07T02:24:33.467233452 0.017289s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-07T02:24:33.470307958 0.020364s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-07T02:24:33.471798414 0.021853s notice: Loading data from directory /data/rethinkdb_data
+2026-07-07T02:24:33.493415519 0.043470s info: Cache size is set to 2048 MB
+2026-07-07T02:24:33.493919540 0.043974s notice: Listening for intracluster connections on port 29015
+2026-07-07T02:24:33.575855685 0.125911s notice: Listening for client driver connections on port 28015
+2026-07-07T02:24:33.575884153 0.125939s notice: Listening for administrative HTTP connections on port 8080
+2026-07-07T02:24:33.575884547 0.125939s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.3, ::1
+2026-07-07T02:24:33.575884700 0.125939s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.3, ::1
+2026-07-07T02:24:33.575884853 0.125940s notice: Listening on http addresses: 127.0.0.1, 172.21.0.3, ::1
+2026-07-07T02:24:33.575885014 0.125940s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-07T02:24:34.572387506 1.122443s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 7.
+2026-07-07T02:24:34.579306899 1.129362s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 7. Latest log index is 29.
+2026-07-07T02:24:34.602696564 1.152751s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 7.
+2026-07-07T02:24:34.607443892 1.157499s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 7. Latest log index is 23.
+2026-07-07T02:24:34.613177433 1.163232s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 7.
+2026-07-07T02:24:34.622662540 1.172717s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 7. Latest log index is 21.
+2026-07-07T02:24:34.660055078 1.210110s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T02:24:34.660063747 1.210119s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T02:24:34.660665666 1.210721s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:24:34.660671806 1.210727s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:24:34.660737442 1.210792s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:24:34.660924122 1.210979s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661087937 1.211143s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661094744 1.211149s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661118558 1.211173s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661120982 1.211176s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661122854 1.211178s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661169070 1.211224s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661209633 1.211264s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661212830 1.211268s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.661224844 1.211280s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:24:34.704586904 1.254642s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 7.
+2026-07-07T02:24:34.710576215 1.260631s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 7. Latest log index is 20.
+2026-07-07T02:24:34.934001966 1.484057s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 7.
+2026-07-07T02:24:35.096794795 1.646850s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 7. Latest log index is 24.
+2026-07-07T02:24:35.238932008 1.788987s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 7.
+2026-07-07T02:24:35.248807111 1.798862s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 7.
+2026-07-07T02:24:35.253634457 1.803689s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 7. Latest log index is 21.
+2026-07-07T02:24:35.258467359 1.808523s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 7. Latest log index is 20.
+2026-07-07T02:24:35.334998217 1.885053s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T02:24:35.335009506 1.885064s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T02:24:35.335365645 1.885421s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:24:35.335648081 1.885703s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:24:35.335655319 1.885710s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:24:35.335661915 1.885717s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:24:35.335668452 1.885723s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:34:12.539306612 579.089362s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T02:34:12.539525344 579.089580s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T02:34:12.539612224 579.089667s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T02:34:12.539615799 579.089671s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T02:34:12.539756532 579.089811s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:34:12.539758586 579.089813s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:34:12.539759694 579.089814s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:34:12.539760790 579.089816s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:34:12.539763464 579.089818s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:34:12.540313180 579.090368s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:34:12.540340183 579.090395s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:34:12.540342577 579.090397s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:34:12.540590843 579.090646s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540594208 579.090649s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540595142 579.090650s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540595950 579.090651s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540597588 579.090652s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540598371 579.090653s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540599959 579.090655s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540601496 579.090656s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540604635 579.090659s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:34:12.540605263 579.090660s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.470692569 1806.020748s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T02:54:39.471150977 1806.021206s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T02:54:39.471247559 1806.021302s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T02:54:39.471249882 1806.021305s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T02:54:39.471349262 1806.021404s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:54:39.471352539 1806.021407s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:54:39.471354289 1806.021409s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:54:39.471357087 1806.021412s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:54:39.471359643 1806.021414s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T02:54:39.471874101 1806.021929s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:54:39.471895890 1806.021951s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:54:39.471913742 1806.021968s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T02:54:39.472100350 1806.022155s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472101157 1806.022156s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472101596 1806.022156s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472118037 1806.022173s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472120660 1806.022175s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472121291 1806.022176s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472123067 1806.022178s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472127652 1806.022182s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472128513 1806.022183s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T02:54:39.472151401 1806.022206s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.071908685 5668.621964s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T03:59:02.072304038 5668.622359s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T03:59:02.072383580 5668.622438s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T03:59:02.072388020 5668.622443s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T03:59:02.072795730 5668.622851s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T03:59:02.072798436 5668.622853s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T03:59:02.072811051 5668.622866s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T03:59:02.072812393 5668.622867s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T03:59:02.072813524 5668.622868s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T03:59:02.072872972 5668.622928s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T03:59:02.072875047 5668.622930s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T03:59:02.072876928 5668.622932s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T03:59:02.073327958 5668.623383s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073349278 5668.623404s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073360279 5668.623415s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073403073 5668.623458s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073403452 5668.623458s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073410710 5668.623465s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073415359 5668.623470s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073415751 5668.623470s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073416881 5668.623472s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T03:59:02.073418019 5668.623473s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.210868417 7623.760923s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T04:31:37.211137001 7623.761192s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T04:31:37.211212897 7623.761268s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T04:31:37.211218403 7623.761273s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T04:31:37.211644422 7623.761699s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:31:37.211648861 7623.761704s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:31:37.211667532 7623.761723s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:31:37.211670705 7623.761725s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:31:37.211705175 7623.761760s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:31:37.211973204 7623.762028s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T04:31:37.211978033 7623.762033s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T04:31:37.211981088 7623.762036s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T04:31:37.212302600 7623.762357s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212350192 7623.762405s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212395151 7623.762450s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212395839 7623.762451s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212404949 7623.762460s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212408955 7623.762464s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212409575 7623.762464s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212419015 7623.762474s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212419686 7623.762474s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:31:37.212421481 7623.762476s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.403653231 8668.953708s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T04:49:02.404087867 8668.954143s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T04:49:02.404138663 8668.954193s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T04:49:02.404143513 8668.954198s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T04:49:02.404280370 8668.954335s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:49:02.404282561 8668.954337s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:49:02.404300024 8668.954355s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:49:02.404302002 8668.954357s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:49:02.404319965 8668.954375s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T04:49:02.404915393 8668.954970s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T04:49:02.404919978 8668.954975s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T04:49:02.404922783 8668.954978s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T04:49:02.405052998 8668.955108s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405172912 8668.955228s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405173645 8668.955228s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405176362 8668.955231s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405178026 8668.955233s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405189370 8668.955244s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405191157 8668.955246s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405192775 8668.955248s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405275015 8668.955330s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T04:49:02.405277827 8668.955333s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:33:30.370255672 18536.920311s notice: Server got SIGTERM from pid 0, uid 0; shutting down...
+2026-07-07T07:33:30.370355999 18536.920411s notice: Shutting down client connections...
+2026-07-07T07:33:30.370398190 18536.920453s notice: All client connections closed.
+2026-07-07T07:33:30.370399969 18536.920455s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2026-07-07T07:33:30.375878019 18536.925933s notice: Storage engine shut down.
+2026-07-07T07:48:33.113920189 0.067815s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2026-07-07T07:48:33.124312940 0.078209s notice: Running on Linux 6.8.0-51-generic x86_64
+2026-07-07T07:48:33.124411494 0.078306s notice: Loading data from directory /data/rethinkdb_data
+2026-07-07T07:48:33.160138380 0.114033s info: Cache size is set to 2048 MB
+2026-07-07T07:48:33.160579068 0.114474s notice: Listening for intracluster connections on port 29015
+2026-07-07T07:48:33.285962862 0.239857s notice: Listening for client driver connections on port 28015
+2026-07-07T07:48:33.286011971 0.239906s notice: Listening for administrative HTTP connections on port 8080
+2026-07-07T07:48:33.286020873 0.239915s notice: Listening on cluster addresses: 127.0.0.1, 172.21.0.8, ::1
+2026-07-07T07:48:33.286031716 0.239926s notice: Listening on driver addresses: 127.0.0.1, 172.21.0.8, ::1
+2026-07-07T07:48:33.286034417 0.239929s notice: Listening on http addresses: 127.0.0.1, 172.21.0.8, ::1
+2026-07-07T07:48:33.286037372 0.239932s notice: Server ready, "235c414ccea8_5ov" 9d48d175-1a64-445a-812c-49959206456a
+2026-07-07T07:48:34.289113772 1.243008s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Starting a new Raft election for term 8.
+2026-07-07T07:48:34.294096401 1.247991s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: This server is Raft leader for term 8. Latest log index is 24.
+2026-07-07T07:48:34.356424100 1.310319s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Starting a new Raft election for term 8.
+2026-07-07T07:48:34.360654692 1.314549s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: This server is Raft leader for term 8. Latest log index is 24.
+2026-07-07T07:48:34.578624013 1.532519s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: Starting a new Raft election for term 8.
+2026-07-07T07:48:34.591524712 1.545419s info: Table a5b7b42d-eaec-4df0-9cb3-79aa44463ec1: This server is Raft leader for term 8. Latest log index is 23.
+2026-07-07T07:48:34.693649365 1.647544s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T07:48:34.693826109 1.647721s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T07:48:34.693848188 1.647743s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T07:48:34.877285924 1.831181s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Starting a new Raft election for term 8.
+2026-07-07T07:48:34.901405780 1.855301s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: This server is Raft leader for term 8. Latest log index is 26.
+2026-07-07T07:48:34.911284774 1.865180s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Starting a new Raft election for term 8.
+2026-07-07T07:48:34.916319274 1.870214s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: This server is Raft leader for term 8. Latest log index is 32.
+2026-07-07T07:48:34.993314927 1.947210s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Starting a new Raft election for term 8.
+2026-07-07T07:48:34.998561665 1.952457s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: This server is Raft leader for term 8. Latest log index is 27.
+2026-07-07T07:48:35.183989437 2.137884s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Starting a new Raft election for term 8.
+2026-07-07T07:48:35.201124362 2.155019s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: This server is Raft leader for term 8. Latest log index is 23.
+2026-07-07T07:48:35.368805770 2.322700s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T07:48:35.369072000 2.322966s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T07:48:35.369139377 2.323034s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T07:48:35.369143474 2.323038s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T07:48:35.369145885 2.323040s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T07:48:35.369180183 2.323075s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T07:48:35.369311652 2.323206s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T07:48:35.369315183 2.323210s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T07:48:35.369380727 2.323275s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T07:48:35.369622688 2.323517s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369734469 2.323629s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369745377 2.323640s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369746075 2.323640s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369774756 2.323669s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369813601 2.323708s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369849236 2.323744s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369870619 2.323765s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369873201 2.323768s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T07:48:35.369881422 2.323776s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.864899398 4152.818794s info: Table 40974592-7704-4a5f-990a-632eb9380ffa: Configuration is changing.
+2026-07-07T08:57:45.865290947 4152.819185s info: Table 85043384-ef3d-446c-8c15-a3a679c9ac12: Configuration is changing.
+2026-07-07T08:57:45.865310176 4152.819205s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T08:57:45.865351921 4152.819246s info: Table 99c3b1ac-9564-42f3-af5c-3a427c33b02b: Configuration is changing.
+2026-07-07T08:57:45.865477805 4152.819372s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T08:57:45.865481428 4152.819376s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T08:57:45.865500044 4152.819395s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T08:57:45.865507058 4152.819401s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T08:57:45.865509182 4152.819404s info: Table 98a76c42-fa32-4d64-ac8f-8c4f7c686af3: Configuration is changing.
+2026-07-07T08:57:45.866074692 4152.819969s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T08:57:45.866104898 4152.819999s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T08:57:45.866122940 4152.820017s info: Table 90ca726a-6639-47ed-9559-ac7e8f8ea5d5: Configuration is changing.
+2026-07-07T08:57:45.866288024 4152.820182s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866305379 4152.820200s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866307911 4152.820202s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866308484 4152.820203s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866310034 4152.820204s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866311661 4152.820206s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866313714 4152.820208s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866315453 4152.820210s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866315980 4152.820210s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.
+2026-07-07T08:57:45.866327046 4152.820221s info: Table 5b30cfc6-745a-46ff-9ad3-c4787eb386f4: Configuration is changing.

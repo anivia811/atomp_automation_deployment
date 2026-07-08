@@ -1,0 +1,31 @@
+declare const _default: {
+    address: string;
+    allowCors: boolean;
+    allowInsecure: string[];
+    basePath: string;
+    callbackPort: number;
+    debugLogSpacing: boolean;
+    denyInsecure: string[];
+    driversImportChunkSize: number;
+    keepAliveTimeout: number;
+    requestTimeout: number;
+    localTimezone: boolean;
+    logFormat: string;
+    loglevel: string;
+    logNoColors: boolean;
+    logTimestamp: boolean;
+    longStacktrace: boolean;
+    maxIpcDataSize: number;
+    maxIpcTopics: number;
+    noPermsCheck: boolean;
+    pluginsImportChunkSize: number;
+    port: number;
+    relaxedSecurityEnabled: boolean;
+    sessionOverride: boolean;
+    shutdownTimeout: number;
+    strictCaps: boolean;
+    useDrivers: string[];
+    usePlugins: never[];
+};
+export default _default;
+//# sourceMappingURL=default-args.d.ts.map

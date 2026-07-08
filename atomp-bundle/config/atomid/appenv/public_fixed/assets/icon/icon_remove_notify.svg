@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="Group_56" data-name="Group 56" transform="translate(0.096 -0.095)">
+    <rect id="Rectangle_36_Copy" data-name="Rectangle 36 Copy" width="16" height="16" transform="translate(-0.096 0.095)" fill="none"/>
+    <g id="close" transform="translate(2.985 2.938)">
+      <path id="Shape" d="M5.911,5.036,9.9,1.052a.615.615,0,0,0-.87-.87L5.039,4.164,1.051.181a.615.615,0,0,0-.87.87L4.168,5.034.181,9.02a.615.615,0,0,0,.87.87L5.039,5.906,9.027,9.891a.615.615,0,0,0,.87-.87Z" transform="translate(0)" fill="rgba(0,0,0,0.45)"/>
+    </g>
+  </g>
+</svg>

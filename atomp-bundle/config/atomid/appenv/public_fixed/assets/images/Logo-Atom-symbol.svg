@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="44" height="46" viewBox="0 0 44 46">
+  <defs>
+    <radialGradient id="radial-gradient" cx="0.333" cy="0.315" r="0.661" gradientTransform="matrix(0.756, 0.655, -0.655, 0.756, 0.449, -0.205)" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#51d6d0"/>
+      <stop offset="1" stop-color="#1e94f2"/>
+    </radialGradient>
+    <filter id="Path_432" x="0" y="2" width="44" height="44" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feFlood flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_17" data-name="Group 17" transform="translate(-390.581 -757.07)">
+    <text id="A" transform="translate(399.542 789.07)" fill="#eaeaea" font-size="34" font-family="SFProText-Heavy, SF Pro Text" font-weight="800" letter-spacing="-0.1em"><tspan x="0" y="0">A</tspan></text>
+    <circle id="Ellipse_13" data-name="Ellipse 13" cx="7" cy="7" r="7" transform="translate(405.542 774.07)" fill="#272c2f"/>
+    <g transform="matrix(1, 0, 0, 1, 390.58, 757.07)" filter="url(#Path_432)">
+      <path id="Path_432-2" data-name="Path 432" d="M4,0A4,4,0,1,1,0,4,4,4,0,0,1,4,0Z" transform="translate(18 20)" fill="url(#radial-gradient)"/>
+    </g>
+  </g>
+</svg>

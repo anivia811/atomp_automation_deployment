@@ -1,0 +1,1 @@
+{"version":3,"file":"plugin.spec.js","sourceRoot":"","sources":["../../../test/unit/plugin.spec.ts"],"names":[],"mappings":";;;;;AAAA,6CAAqD;AACrD,+BAAiC;AACjC,wEAA8C;AAE9C,IAAA,UAAG,EAAC,0BAAc,CAAC,CAAC;AAEpB,QAAQ,CAAC,uBAAuB,EAAE;IAChC,EAAE,CAAC,cAAc,EAAE;QACjB,IAAA,aAAM,EAAC,4BAAmB,CAAC,CAAC,EAAE,CAAC,KAAK,CAAC;IACvC,CAAC,CAAC,CAAC;AACL,CAAC,CAAC,CAAC"}

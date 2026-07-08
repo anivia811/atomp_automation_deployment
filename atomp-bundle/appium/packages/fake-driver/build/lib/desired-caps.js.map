@@ -1,0 +1,1 @@
+{"version":3,"file":"desired-caps.js","sourceRoot":"","sources":["../../lib/desired-caps.ts"],"names":[],"mappings":";;;AAEa,QAAA,qBAAqB,GAAG;IACnC,GAAG,EAAE;QACH,QAAQ,EAAE,IAAI;QACd,QAAQ,EAAE,IAAI;KACf;IACD,SAAS,EAAE;QACT,SAAS,EAAE,IAAI;KAChB;IACD,QAAQ,EAAE;QACR,SAAS,EAAE,IAAI;KAChB;CAC6B,CAAC"}

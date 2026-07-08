@@ -1,0 +1,119 @@
+FROM ubuntu:22.04
+
+# Sneak the stf executable into $PATH.
+ENV PATH=/app/bin:$PATH
+
+# Node >=22.18 auto-writes a module compile cache to /tmp/node-compile-cache.
+# Root-owned cache entries from earlier layers break the stf-build user's
+# `find /tmp ... -delete` cleanup, so disable it for build and runtime.
+ENV NODE_DISABLE_COMPILE_CACHE=1
+
+WORKDIR /app
+EXPOSE 3000
+
+ARG TARGETARCH
+
+RUN if [ "$TARGETARCH" = "amd64" ] || [ -z "$TARGETARCH" ]; then \
+    export DEBIAN_FRONTEND=noninteractive && \
+    useradd --system --create-home --shell /usr/sbin/nologin stf-build && \
+    useradd --system --create-home --shell /usr/sbin/nologin stf && \
+    apt-get update && \
+    apt-get -y install --no-install-recommends \
+      ca-certificates wget python3 build-essential pkg-config zip unzip \
+      android-tools-adb \
+      openssh-client sshpass sshfs netcat-openbsd && \
+    update-ca-certificates && \
+    cd /tmp && \
+    wget --progress=dot:mega \
+      https://nodejs.org/dist/v24.16.0/node-v24.16.0-linux-x64.tar.xz && \
+    tar -xJf node-v*.tar.xz --strip-components 1 -C /usr/local && \
+    rm node-v*.tar.xz && \
+    npm install -g node-gyp && \
+    su stf-build -s /bin/bash -c 'node-gyp install' && \
+    apt-get -y install --no-install-recommends \
+      libzmq3-dev libprotobuf-dev git graphicsmagick openjdk-11-jdk yasm cmake && \
+    apt-get clean && \
+    rm -rf /var/cache/apt/* /var/lib/apt/lists/* && \
+    mkdir /tmp/bundletool && \
+    cd /tmp/bundletool && \
+    wget --progress=dot:mega \
+      https://github.com/google/bundletool/releases/download/1.2.0/bundletool-all-1.2.0.jar && \
+    mv bundletool-all-1.2.0.jar bundletool.jar; \
+  fi
+
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+    export DEBIAN_FRONTEND=noninteractive && \
+    useradd --system --create-home --shell /usr/sbin/nologin stf-build && \
+    useradd --system --create-home --shell /usr/sbin/nologin stf && \
+    apt-get update && \
+    apt-get -y install --no-install-recommends \
+      ca-certificates pkg-config curl zip unzip wget python3 build-essential cmake ninja-build \
+      android-tools-adb \
+      openssh-client sshpass sshfs netcat-openbsd && \
+    update-ca-certificates && \
+    cd /tmp && \
+    wget --progress=dot:mega \
+      https://nodejs.org/dist/v24.16.0/node-v24.16.0-linux-arm64.tar.xz && \
+    tar -xJf node-v*.tar.xz --strip-components 1 -C /usr/local && \
+    rm node-v*.tar.xz && \
+    npm install -g node-gyp && \
+    su stf-build -s /bin/bash -c 'node-gyp install' && \
+    apt-get -y install --no-install-recommends \
+      musl-dev libzmq3-dev libprotobuf-dev git graphicsmagick yasm && \
+    ln -s /usr/lib/aarch64-linux-musl/libc.so /lib/libc.musl-aarch64.so.1 && \
+    apt-get clean && \
+    rm -rf /var/cache/apt/* /var/lib/apt/lists/* && \
+    mkdir /tmp/bundletool && \
+    cd /tmp/bundletool && \
+    wget --progress=dot:mega \
+      https://github.com/google/bundletool/releases/download/1.2.0/bundletool-all-1.2.0.jar && \
+    mv bundletool-all-1.2.0.jar bundletool.jar; \
+  fi
+
+# Copy app source.
+COPY . /tmp/build/
+
+# Give permissions to build user.
+RUN mkdir -p /app && \
+    chown -R stf-build:stf-build /tmp/build /tmp/bundletool /app
+
+USER stf-build
+
+# The build below installs front-end deps with bower, builds with gulp, then
+# strips dev-only dirs (docs/demo/test/example/...) from res/bower_components.
+# Those dirs bundle ancient vendored libs the app never loads (e.g.
+# ng-table/docs ships AngularJS 1.3.15) but which app/index.js serves verbatim
+# at /static/bower_components — so they surface as CVEs in SCA scans and are
+# reachable over HTTP. The app only uses each package's dist/main file, so
+# removing them is safe. NOTE: keep that find on ONE line — a `#` comment after
+# a `&& \` continuation gets swallowed and silently skips the next command.
+RUN set -x && \
+    cd /tmp/build && \
+    export PATH=$PWD/node_modules/.bin:$PATH && \
+    npm install --python="/usr/bin/python3" --ignore-scripts --omit=optional --loglevel http && \
+    bower install || true && \
+    node scripts/patch-vendored-redos.js && \
+    find lib -name '*.sh' -exec sed -i 's/\r$//' {} + && \
+    gulp build || true && \
+    npm prune --omit=dev || true && \
+    find res/bower_components -type d \( -name docs -o -name 'demo*' -o -name test -o -name tests -o -name 'example*' -o -name e2e -o -name perf -o -name benchmark -o -name benchmarks -o -name coverage \) -prune -exec rm -rf {} + && \
+    tar -cf - \
+      --exclude=node_modules --exclude=.git --exclude='*.tgz' \
+      --exclude=rethinkdb_data --exclude=tmp --exclude=temp \
+      --exclude=services --exclude=res/statistical/node_modules \
+      -C /tmp/build . | tar -xf - -C /app && \
+    mv /tmp/build/node_modules /app/node_modules && \
+    sed -i 's/\r$//' /app/bin/stf && \
+    chmod 755 /app/bin/stf && \
+    rm -rf ~/.node-gyp && \
+    mkdir -p /app/bundletool && \
+    mv /tmp/bundletool/* /app/bundletool && \
+    find /tmp -mindepth 1 ! -regex '^/tmp/hsperfdata_root\(/.*\)?' -delete && \
+    cd && rm -rf .npm .cache .config .local
+
+USER root
+RUN chown -R stf:stf /app
+
+USER stf
+
+CMD ["stf", "--help"]

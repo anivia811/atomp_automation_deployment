@@ -1,0 +1,32 @@
+name: Publish docs
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Appium Server Release"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7.0.0
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+      - name: Setup Node and install deps (LTS)
+        uses: ./.github/actions/setup-build
+        with:
+          node-version: lts/*
+          install-command: npm ci
+          run-build: 'true'
+      - name: Install dependencies (Python)
+        run: npm run install-docs-deps
+      - name: Fetch gh-pages
+        run: |
+          git fetch origin gh-pages:gh-pages || true
+      - name: Publish docs
+        run: |
+          npm run docs:publish

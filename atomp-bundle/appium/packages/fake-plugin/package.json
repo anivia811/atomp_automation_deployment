@@ -1,0 +1,72 @@
+{
+  "name": "@appium/fake-plugin",
+  "version": "4.3.2",
+  "description": "A fake Appium plugin",
+  "keywords": [
+    "automation",
+    "javascript",
+    "selenium",
+    "webdriver",
+    "ios",
+    "android",
+    "firefoxos",
+    "testing"
+  ],
+  "homepage": "https://appium.io",
+  "bugs": {
+    "url": "https://github.com/appium/appium/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appium/appium.git",
+    "directory": "packages/fake-plugin"
+  },
+  "license": "Apache-2.0",
+  "author": "https://github.com/appium",
+  "main": "./build/lib/index.js",
+  "types": "./build/lib/index.d.ts",
+  "directories": {
+    "lib": "./lib"
+  },
+  "files": [
+    "build/lib",
+    "lib",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "test": "npm run test:unit",
+    "test:smoke": "node ./build/lib/index.js --smoke-test",
+    "test:unit": "mocha \"./test/unit/**/*.spec.*ts\""
+  },
+  "dependencies": {
+    "@appium/base-plugin": "3.3.2",
+    "@appium/support": "7.2.5",
+    "asyncbox": "6.3.0"
+  },
+  "devDependencies": {
+    "@appium/types": "1.5.1",
+    "express": "5.2.1"
+  },
+  "peerDependencies": {
+    "appium": "^3.0.0-beta.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
+    "npm": ">=10"
+  },
+  "appium": {
+    "pluginName": "fake",
+    "mainClass": "FakePlugin",
+    "scripts": {
+      "fake-error": "./build/lib/scripts/fake-error.js",
+      "fake-success": "./build/lib/scripts/fake-success.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f7b20335eab4022e5cbbb627ec86866a994444f8",
+  "tags": [
+    "appium"
+  ]
+}

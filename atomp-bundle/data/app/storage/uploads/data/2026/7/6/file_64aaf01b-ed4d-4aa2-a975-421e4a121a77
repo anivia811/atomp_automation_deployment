@@ -1,0 +1,188 @@
+
+    module.exports = async function (createdDriver, expect, _delay, _waitUntil, aiService, atomCapture, device, file, options, expectErrors, callbackService, inputVariables, stepResult, callbackInItDriver) {
+
+  let driver = createdDriver;
+
+  /* Ultilities */
+  // Get device windowSize
+  const windowSize = await driver.getWindowSize()
+  let currentContext = await driver.getContext();
+
+  // Take screenshot first time when script intialize
+  const ignoreScreenshot = await device.takeScreenshot({ captureType: 'streaming', responseType: 'filePath' })
+  if (!ignoreScreenshot) {
+    throw new Error('Could not capture device screenshot!')
+  }
+  const ignoreScreenshotSize = atomCapture.getImageSize(ignoreScreenshot)
+
+  // Remove temporary file
+  file.deleteFile(ignoreScreenshot, true)
+
+  // Get actual element bounds compare to actual screenshot size
+  const getActualBounds = bounds => {
+    // Scale bounds size with device platform === 2 (iOS)
+    if (device.platform == 2) {
+      const ratio = Math.min(ignoreScreenshotSize.width, ignoreScreenshotSize.height) / Math.min(windowSize.width, windowSize.height)
+      bounds = atomCapture.getBoundRatio(bounds, ratio)
+    }
+
+    return bounds
+  }
+
+  // Get if condition run result
+  const execute = async (fn, data, ignoreResult = false) => {
+    let result = true
+    try {
+      result = (await fn()) !== false      
+    } catch (error) {
+      result = false
+    }
+
+    data.result = ignoreResult ? true : result
+    data.evidencePath = await device.takeScreenshot({ captureType: 'streaming', responseType: 'url' })
+    stepResult.push(data)
+    return result
+  }
+
+  const findOptimalElement = async (strategy, locator, optimalStrategy) => {
+    // Filter element by "similiar" xpath
+    let element = null
+    let currentXpath = optimalStrategy.xpath;
+    let firstTime = 1;
+    let error = null;
+    while (currentXpath) {
+      try {
+        currentXpath = currentXpath.substring(0, currentXpath.lastIndexOf('/'));
+        element = await driver.$(`${currentXpath}//*[@${strategy}="${locator}"]`)
+        if (firstTime) { firstTime = 0; await element.waitForExist({ timeout: 20000 }) }
+        if (element && !element.error) {
+          let elementClass = null;
+          elementClass = await element.getAttribute('class');
+          if (elementClass && elementClass.error && elementClass.message) {
+            elementClass = await element.getAttribute('className');
+          }
+          if (optimalStrategy.class && optimalStrategy.class === elementClass) {
+            break;
+          } else { element = null }
+        };
+      } catch (error) {
+        element = null
+        error = error
+      }
+    }
+    return element ? Promise.resolve(element) : Promise.reject(error)
+  }
+
+  /* Begin script */
+  var result = undefined
+  var evidencePath = undefined
+  var bounds = undefined
+  var systemErrorMsg = undefined
+  let waitUntilScreenshotImage = ''
+  let waitUntilScreenType = ''
+  let asyncVisualCheck = [];
+  let stepAIActualImage = '';
+
+    
+/* begin_step: «Blank action», actionId: 5ef8372b-c4cc-4bda-bda2-4c8270876045 */
+
+  try {
+    result = true; evidencePath = undefined; systemErrorMsg = undefined;
+    bounds = undefined
+    // No code for blank action
+await _delay(3000)
+    if (stepAIActualImage) {
+      evidencePath = stepAIActualImage
+    } else if ((null === waitUntilScreenType) && waitUntilScreenshotImage) {
+      evidencePath = waitUntilScreenshotImage
+    } else {
+      evidencePath = await device.takeScreenshot({ captureType: 'streaming', responseType: 'url', selectedScreenType: null })
+    }
+  }
+  catch (e) {
+    result = false
+    
+await _delay(3000)
+    if (stepAIActualImage) {
+      evidencePath = stepAIActualImage
+    } else if ((null === waitUntilScreenType) && waitUntilScreenshotImage) {
+      evidencePath = waitUntilScreenshotImage
+    } else {
+      evidencePath = await device.takeScreenshot({ captureType: 'streaming', responseType: 'url', selectedScreenType: null })
+    }
+  }
+  finally {
+    const stepRun = stepResult.find(sr => sr.stepId === "2335c4e4-3ae2-4f63-b991-95c4be57dde9" && sr.parentId === "5ef8372b-c4cc-4bda-bda2-4c8270876045")
+    if (!stepRun) {
+      stepResult.push({
+        stepIndex: "1",
+        stepId: "2335c4e4-3ae2-4f63-b991-95c4be57dde9",
+        parentId: "5ef8372b-c4cc-4bda-bda2-4c8270876045",
+        loopId: undefined,
+        loopRunningCounter: undefined,
+        result,
+        stepEndTime: Date.now(),
+        evidencePath,
+        elementBounds: bounds,
+        scriptType: "1",
+        errorMessage: systemErrorMsg || "Cannot execute action [«Blank action»]"
+      })
+    }
+    else {
+      stepRun.stepIndex = "1"
+      stepRun.result = result
+      stepRun.evidencePath = evidencePath
+      stepRun.loopRunningCounter = undefined
+    }
+
+    await callbackService({
+      stepIndex: "1",
+      stepId: "2335c4e4-3ae2-4f63-b991-95c4be57dde9",
+      parentId: "5ef8372b-c4cc-4bda-bda2-4c8270876045",
+      loopId: undefined,
+      loopRunningCounter: undefined,
+      result,
+      evidencePath,
+      scriptType: "1",
+      
+      errorMessage: "Cannot execute action [«Blank action»]"
+    })
+    
+    
+  }
+  /* Reset wait until time screenshot image after each step */
+  waitUntilScreenshotImage = ''
+
+  stepAIActualImage = ''
+
+/* end_step: «Blank action», actionId: 5ef8372b-c4cc-4bda-bda2-4c8270876045 */
+
+    if (asyncVisualCheck && asyncVisualCheck.length) {
+      await Promise.all(asyncVisualCheck)
+        .then(async (values) => {
+          let callbackData = {};
+          for (let i = 0; i < values.length; i++) {
+            if (typeof values[i] === 'object' && Object.keys(values[i]).length && values[i].rejectedMessage) {
+              const errorAIStepResult = stepResult.find(item => item.stepId === values[i].id);
+              systemErrorMsg = values[i].rejectedMessage;
+              if (errorAIStepResult) {
+                if (!callbackData || !Object.keys(callbackData).length) {
+                  callbackData = { ...errorAIStepResult };
+                  delete callbackData.elementBounds;
+                  callbackData.result = false;
+                  callbackData.isAIVisual = true;
+                }
+
+                errorAIStepResult.result = false;
+                errorAIStepResult.errorMessage = systemErrorMsg;
+              }
+            }
+          }
+          if (callbackData && Object.keys(callbackData).length) {
+            await callbackService(callbackData);
+          }
+        });
+    }
+    return stepResult
+  }
+    

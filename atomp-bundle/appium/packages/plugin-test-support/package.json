@@ -1,0 +1,59 @@
+{
+  "name": "@appium/plugin-test-support",
+  "version": "2.0.0",
+  "description": "Testing utilities for Appium plugins",
+  "keywords": [
+    "automation",
+    "javascript",
+    "selenium",
+    "webdriver",
+    "ios",
+    "android",
+    "firefoxos",
+    "testing"
+  ],
+  "homepage": "https://appium.io",
+  "bugs": {
+    "url": "https://github.com/appium/appium/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/appium/appium.git",
+    "directory": "packages/plugin-test-support"
+  },
+  "license": "Apache-2.0",
+  "author": "https://github.com/appium",
+  "main": "./build/lib/index.js",
+  "types": "./build/lib/index.d.ts",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "build/lib",
+    "lib",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "test": "npm run test:unit",
+    "test:smoke": "node ./build/lib/index.js --smoke-test",
+    "test:unit": "exit 0"
+  },
+  "dependencies": {
+    "async-lock": "1.4.1",
+    "teen_process": "4.1.5"
+  },
+  "devDependencies": {
+    "@appium/types": "1.5.1"
+  },
+  "peerDependencies": {
+    "appium": "^3.0.0-beta.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0",
+    "npm": ">=10"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f7b20335eab4022e5cbbb627ec86866a994444f8"
+}

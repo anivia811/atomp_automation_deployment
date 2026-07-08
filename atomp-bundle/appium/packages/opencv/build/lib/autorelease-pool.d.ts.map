@@ -1,0 +1,1 @@
+{"version":3,"file":"autorelease-pool.d.ts","sourceRoot":"","sources":["../../lib/autorelease-pool.ts"],"names":[],"mappings":"AAAA,UAAU,SAAS;IACjB,MAAM,IAAI,IAAI,CAAC;CAChB;AAED,qBAAa,qBAAqB;IAChC,OAAO,CAAC,QAAQ,CAAC,MAAM,CAAiB;;IAMxC,GAAG,CAAC,CAAC,SAAS,SAAS,EAAE,IAAI,EAAE,CAAC,GAAG,CAAC;IAQpC,KAAK,IAAI,IAAI;CAUd"}

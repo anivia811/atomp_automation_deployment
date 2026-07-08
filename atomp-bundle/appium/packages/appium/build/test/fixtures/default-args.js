@@ -1,0 +1,32 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+    address: '0.0.0.0',
+    allowCors: false,
+    allowInsecure: [],
+    basePath: '',
+    callbackPort: 4723,
+    debugLogSpacing: false,
+    denyInsecure: [],
+    driversImportChunkSize: 3,
+    keepAliveTimeout: 600,
+    requestTimeout: 3600,
+    localTimezone: false,
+    logFormat: 'text',
+    loglevel: 'debug',
+    logNoColors: false,
+    logTimestamp: false,
+    longStacktrace: false,
+    maxIpcDataSize: 1048576,
+    maxIpcTopics: 1000,
+    noPermsCheck: false,
+    pluginsImportChunkSize: 7,
+    port: 4723,
+    relaxedSecurityEnabled: false,
+    sessionOverride: false,
+    shutdownTimeout: 5000,
+    strictCaps: false,
+    useDrivers: [],
+    usePlugins: [],
+};
+//# sourceMappingURL=default-args.js.map

@@ -1,0 +1,169 @@
+.register{
+    .register-form{
+        width: 100%;
+        margin: 0 auto;
+        .title-header{
+            font-weight: 500;
+            font-size: 1.5rem;
+            margin: 13px 0 35px 0;
+            text-align: center;
+            &.style-1{
+                margin: 40px 0 30px 0;
+            }
+        }
+        .name-emai{
+            text-align: center;
+            line-height: 19px;
+            margin-bottom:16px;
+            span{
+                font-weight: 500;
+            }
+        }
+        .desctiption{
+            text-align: center;
+        }
+        .form-input{
+            margin-bottom: 20px;;
+            &.check-agree{
+                margin: 0;
+                padding-top: 5px;
+            }
+        }
+        .form-code{
+          margin: 22px 0 40px 0;
+          position: relative;
+          ul{
+              li{
+                  margin-left: 12px;
+                  &:first-child{
+                      margin-left: 0;
+                  }
+                  input{
+                      width: 40px;
+                      height: 40px;
+                      border: 1px solid #707070;
+                      padding: 0;
+                      text-align: center;
+                      font-size: 20px;
+                  }
+              }
+          }
+          span{
+              display: block;
+              position: absolute;
+              top: 111%;
+              left: 50%;
+              transform: translate(-50% , 0);
+              color: #ff3b30;;
+          }
+      }
+    }
+  }
+  
+  .verify-code{
+    .remove-code{
+        position: absolute;
+        right: -21px;
+        top: -8px;
+        height: 20px;
+        width: 20px;
+        box-shadow: none;
+        border: none;
+        display: inline-block;
+        background: none;
+        background-image: url("assets/icon/icon_remove.svg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: repeat;
+        transition: all 0.5s ease;
+        &:hover{
+            background-image: url("assets/icon/icon_remove-1.svg");;
+        }
+    }
+  }
+  
+.form-nationality{
+    input{
+        position: relative;
+        z-index: 1;
+        text-align: left;
+    }
+    .overlay-nationality{
+        height: 32px;
+        width: 100%;
+        position: absolute;
+        top:0;
+        left: 0;
+        z-index: 99999;
+        background: transparent;
+        cursor: pointer;
+    }
+    .overlay{
+        background: transparent;
+        z-index: 9999999;
+    }
+    .sub-nationality{
+        background: #fff;
+        padding: 10px;
+        position: absolute;
+        top:100%;
+        left: 0;
+        width: 100%;
+        z-index: 999999999;
+        border:1px solid #D9D9D9;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+        
+        .input-search{
+            position: relative;
+            input,textarea{
+                margin-bottom: 15px;
+                padding-left: 25px;
+            }
+            textarea{
+                height: 32px;
+                border: 1px solid #D9D9D9;
+                border-radius: 4px;
+                font-size: 0.8125rem;
+                box-shadow: none;
+                width: 100%;
+                margin-bottom: 0;
+                resize:none;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+            .icon-search{
+                position: absolute;
+                left: 4px;
+                top: 8px;
+                z-index:99;
+            }
+        }
+        .list-nationality{
+            height: 300px;
+            overflow-y: auto;
+            ul{
+                li{
+                    cursor: pointer;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    &:hover, &.active{
+                        background: #0099CC;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1500px){
+    .register{
+        .register-form {
+            .title-header{
+                margin: 0 0 25px 0;
+            }
+        }
+    }
+}

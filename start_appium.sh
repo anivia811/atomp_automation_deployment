@@ -1,7 +1,7 @@
 #!/bin/bash
 # Start Appium from monorepo source on port 4723
-APPIUM_DIR="/home/a1/atomp-2/appium"
-LOG_DIR="/home/a1/atomp-2/atomp_automation_deployment/app_data/appium_webserver/logs"
+APPIUM_DIR="/home/viethq44/Downloads/atomp-2-source/atomp-2/appium"
+LOG_DIR="/home/viethq44/Downloads/atomp-2-source/atomp-2/atomp_automation_deployment/app_data/appium_webserver/logs"
 mkdir -p "$LOG_DIR"
 
 # Use system adb 28.0.2 — SDK adb 36.x has a bug where `adb -s <serial> forward`

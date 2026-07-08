@@ -49,8 +49,8 @@ load_image() {
   ok "$tag loaded"
 }
 
-load_image "devicefarm"      "devicefarm:b-20260707"
-load_image "atomid"          "atomid/web:b-20260707"
+load_image "devicefarm"      "devicefarm:b-20260708"
+load_image "atomid"          "atomid/web:b-20260708"
 load_image "mysql-atomid"    "mysql:8.0.34"
 load_image "mysql-df"        "mysql:8.0.24"
 load_image "mysql-auto"      "mysql:8.0.43"

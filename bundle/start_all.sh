@@ -49,8 +49,8 @@ load_image() {
   ok "$tag loaded"
 }
 
-load_image "devicefarm"      "devicefarm:b-20260708"
-load_image "atomid"          "atomid/web:b-20260708"
+load_image "devicefarm"      "devicefarm:b-20260709"
+load_image "atomid"          "atomid/web:b-20260709"
 load_image "mysql-atomid"    "mysql:8.0.34"
 load_image "mysql-df"        "mysql:8.0.24"
 load_image "mysql-auto"      "mysql:8.0.43"
@@ -434,6 +434,9 @@ recreate_container tasker-web \
   -e TASKER_APPIUM_PROTOCOL=http \
   -e TASKER_APPIUM_HOST="$SERVER_IP" \
   -e TASKER_APPIUM_PORT=4723 \
+  -e TASKER_APPIUM_PROXY_PATH_PATTERN="" \
+  -e TASKER_APPIUM_PROXY_LINUX_PATH_PATTERN="" \
+  -e TASKER_APPIUM_PROXY_HOST="" \
   -e TASKER_SELENIUM_HOST="http://${SERVER_IP}:4444" \
   -e TASKER_INTERNAL_PORT=3000 \
   -e TASKER_SERVICE_TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiVGFza2VyIiwiYWxsb3dfc2VydmljZSI6WyJUZXN0ZXI0MCIsIkFUT01JRCIsIlN0b3JhZ2UiXX0sImlhdCI6MTU5NjA5MTczM30.llG3I1zTuuhtFDcLt-vaU0cXJT5V38SYdJLKGfziKXpaEJU0QBvhYn_FLYQV4fDy2Nm9kj5ziHFV1TKQOWcq2wzwGxBg4JOi-ZrwBXzRoFGWEAWwPc8i4FnygO9M58lFtrAZHRkNa5L3Wdkt37iS1QYJPmGJiW61pOYAK6abgv8" \

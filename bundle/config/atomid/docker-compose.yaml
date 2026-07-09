@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   atomid:
-    image: atomid/web:b-20260708
+    image: atomid/web:b-20260709
     container_name: atomid
     networks:
       atomid:

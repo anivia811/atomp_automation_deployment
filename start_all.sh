@@ -34,7 +34,7 @@ ATOMID_SRC="$ROOT_DIR/atom-id-web"
 # 404s on every request and looks like a "connection error" on login.
 [ -d "$ATOMID_SRC" ] || die "atom-id-web not found at $ATOMID_SRC — this must be the ATOMID BACKEND repo, not atom-id (the frontend-only client)"
 ATOMID_TAG="atomid/web:b-$(date +%Y%m%d)"
-docker build -t "$ATOMID_TAG" "$ATOMID_SRC"
+docker build ${NO_CACHE:+--no-cache} -t "$ATOMID_TAG" "$ATOMID_SRC"
 log "  built $ATOMID_TAG"
 
 log "  syncing the new tag into build_bundle.sh, bundle/start_all.sh, and compose configs"
@@ -55,7 +55,7 @@ hr; log "3/4  Building devicefarm from atom-device-farm"
 DEVICEFARM_SRC="$ROOT_DIR/atom-device-farm"
 [ -d "$DEVICEFARM_SRC" ] || die "atom-device-farm not found at $DEVICEFARM_SRC"
 DEVICEFARM_TAG="devicefarm:b-$(date +%Y%m%d)"
-docker build -t "$DEVICEFARM_TAG" "$DEVICEFARM_SRC"
+docker build ${NO_CACHE:+--no-cache} -t "$DEVICEFARM_TAG" "$DEVICEFARM_SRC"
 log "  built $DEVICEFARM_TAG"
 
 log "  syncing the new tag into build_bundle.sh, bundle/start_all.sh, and config.sh"

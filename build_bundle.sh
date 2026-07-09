@@ -86,11 +86,11 @@ log "Saving images..."
 #   - vendor/STFService, vendor/appium, etc. (real device + Appium support, was missing)
 #   - statistical/report Angular app build
 # Used for ALL device farm services (app, api, websocket, processor, provider, provider-android, etc.)
-save_image "devicefarm"      "devicefarm:b-20260707"
+save_image "devicefarm"      "devicefarm:b-20260709"
 # Base atomid image. The OTP algorithm fix (users.controller.js) and the frontend
 # redirect-loop/cookie fix (public_fixed/) are shipped as separate bind-mounted
 # files below, not baked into this image — see config/atomid/appenv/.
-save_image "atomid"          "atomid/web:b-20260707"
+save_image "atomid"          "atomid/web:b-20260708"
 save_image "mysql-atomid"    "mysql:8.0.34"
 save_image "mysql-df"        "mysql:8.0.24"
 save_image "mysql-auto"      "mysql:8.0.43"

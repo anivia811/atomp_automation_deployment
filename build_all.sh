@@ -17,7 +17,7 @@ build_image() {
   echo "[BUILD] $name  =>  $tag"
   echo "        context: $context"
   echo "============================================"
-  docker build -t "$tag" "$context"
+  docker build ${NO_CACHE:+--no-cache} -t "$tag" "$context"
   echo "[DONE] $name built as $tag"
 }
 

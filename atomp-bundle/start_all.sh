@@ -428,7 +428,7 @@ recreate_container tasker-web \
   -e TASKER_STORAGE_API_HOST_INTERNAL_PATH="$STORAGE_PRIVATE/storage" \
   -e TASKER_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e TASKER_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
-  -e TASKER_AI_HOST="http://localhost:1337" \
+  -e TASKER_AI_HOST="http://atomp-ai:8000" \
   -e TASKER_AI_PIPE_URL='[{"from":"","to":""}]' \
   -e TASKER_GLOBAL_AGENT_OPTIONS='{"rejectUnauthorized":false}' \
   -e TASKER_APPIUM_PROTOCOL=http \
@@ -460,7 +460,7 @@ recreate_container studio-web \
   -e STUDIO_STORAGE_API_HOST_FULL_PATH="$STORAGE_PRIVATE/storage" \
   -e STUDIO_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e STUDIO_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
-  -e STUDIO_AI_HOST="http://localhost:1337" \
+  -e STUDIO_AI_HOST="http://atomp-ai:8000" \
   -e STUDIO_PIPE_URL='[{"from":"","to":""}]' \
   -e STUDIO_GLOBAL_AGENT_OPTIONS='{"rejectUnauthorized":false}' \
   -e STUDIO_ALLOW_STORAGE_HOST="[]" \

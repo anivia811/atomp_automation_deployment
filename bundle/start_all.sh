@@ -352,11 +352,12 @@ TASKER_PRIVATE="http://tasker-web:3000"
 DEVICE_FARM_API_URL="http://${SERVER_IP}:3700"
 
 # ── atomp-ai (visual/OCR compare service) ──
-# FastAPI/uvicorn app; the web apps reach it in-network as http://atomp-ai:1337
+# FastAPI/uvicorn app; the web apps reach it in-network as http://atomp-ai:8000
 # (they run on atomp_automation_network, so "localhost" would be the web
-# container itself, not this service). Uvicorn defaults to :8000, so the port
-# is pinned to 1337 to match *_AI_HOST below. start_container (not recreate) so
-# the heavy conda/torch model load isn't repeated on every redeploy.
+# container itself, not this service). Uvicorn's default port :8000 is used to
+# match *_AI_HOST below and origin/master's aeffa54b convention. start_container
+# (not recreate) so the heavy conda/torch model load isn't repeated on every
+# redeploy.
 if docker image inspect atomp-ai:latest >/dev/null 2>&1; then
   # Persist the Keras/torch model caches: on first boot the app downloads
   # VGG16 imagenet weights (~553MB) into /root/.keras; without a volume that
@@ -364,12 +365,12 @@ if docker image inspect atomp-ai:latest >/dev/null 2>&1; then
   start_container atomp-ai \
     --name atomp-ai \
     --network atomp_automation_network \
-    -p 1337:1337 \
+    -p 8000:8000 \
     -v atomp_ai_keras:/root/.keras \
     -v atomp_ai_torch:/root/.cache/torch \
     --restart unless-stopped \
     atomp-ai:latest \
-    python -m uvicorn app:app --host 0.0.0.0 --port 1337
+    python -m uvicorn app:app --host 0.0.0.0 --port 8000
 else
   log "  [SKIP] atomp-ai:latest image not built — AI compare service will be unavailable"
 fi
@@ -398,7 +399,7 @@ recreate_container tester40-web \
   -e TESTER40_STUDIO_API_HOST="$STUDIO_PRIVATE" \
   -e TESTER40_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e TESTER40_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
-  -e TESTER40_AI_HOST="http://atomp-ai:1337" \
+  -e TESTER40_AI_HOST="http://atomp-ai:8000" \
   -e TESTER40_SELENIUM_GRID_HOST="http://${SERVER_IP}:4444" \
   -e TESTER40_ALLOW_STORAGE_HOST="[]" \
   -e TESTER40_PIPE_URLS='[{"from":"","to":""}]' \
@@ -451,7 +452,7 @@ recreate_container tasker-web \
   -e TASKER_STORAGE_API_HOST_INTERNAL_PATH="$STORAGE_PRIVATE/storage" \
   -e TASKER_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e TASKER_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
-  -e TASKER_AI_HOST="http://atomp-ai:1337" \
+  -e TASKER_AI_HOST="http://atomp-ai:8000" \
   -e TASKER_AI_PIPE_URL='[{"from":"","to":""}]' \
   -e TASKER_GLOBAL_AGENT_OPTIONS='{"rejectUnauthorized":false}' \
   -e TASKER_APPIUM_PROTOCOL=http \
@@ -482,7 +483,7 @@ recreate_container studio-web \
   -e STUDIO_STORAGE_API_HOST_FULL_PATH="$STORAGE_PRIVATE/storage" \
   -e STUDIO_DEVICEFARM_HOST="$DEVICE_FARM_API_URL" \
   -e STUDIO_DEVICEFARM_AUTHKEY="$DEVICE_FARM_AUTHKEY" \
-  -e STUDIO_AI_HOST="http://atomp-ai:1337" \
+  -e STUDIO_AI_HOST="http://atomp-ai:8000" \
   -e STUDIO_PIPE_URL='[{"from":"","to":""}]' \
   -e STUDIO_GLOBAL_AGENT_OPTIONS='{"rejectUnauthorized":false}' \
   -e STUDIO_ALLOW_STORAGE_HOST="[]" \

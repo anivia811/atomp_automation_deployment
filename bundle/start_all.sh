@@ -65,6 +65,7 @@ load_image "tester40-client" "tester40-client:node20"
 load_image "tester40-web"    "tester40-web:node20"
 load_image "tasker-web"      "tasker-web:node22"
 load_image "atomp-ai"        "atomp-ai:latest"
+load_image "linuxremote-web" "linuxremote-web:node20"
 
 # ─── 3. Docker networks ───────────────────────────────────────────────────────
 hr; log "Ensuring docker networks exist..."
@@ -358,6 +359,29 @@ start_container atomp-ai \
   atomp-ai:latest
 
 ok "atomp-ai ready"
+
+# ─── 7c. linuxremote-web ────────────────────────────────────────────────────
+# Separate microservice studio-web's LinuxDriver calls for Linux/Host-Unit
+# device sessions ("/remote-linux/api/connect", studio-web/app/utilities/
+# linuxdriver.js) -- distinct from devicefarm's own Appium proxy. Source is
+# the atomp-appium-linux repo. Like atomp-ai before it, this was tracked and
+# pulled by nightly_rebuild.sh but never actually started anywhere, so
+# studio's "Failed to start new session" on any Linux device was a silent
+# connect ECONNREFUSED to a port nothing was listening on. Port 4722 matches
+# studio-web's appium.portLinux default -- STUDIO_APPIUM_HOST already points
+# here, no studio-web config change needed once this is actually listening.
+hr; log "Starting linuxremote-web..."
+
+start_container linuxremote-web \
+  --name linuxremote-web \
+  --network atomp_automation_network \
+  --restart unless-stopped \
+  -p 4722:3000 \
+  -e LINUXREMOTE_INTERNAL_PORT=3000 \
+  -e LINUXREMOTE_SERVICE_PUBLIC_KEY_PATH="./authkey/service-publickey.pem" \
+  linuxremote-web:node20
+
+ok "linuxremote-web ready"
 
 # ─── 8. App services ──────────────────────────────────────────────────────────
 hr; log "Starting app services (tester40, studio, storage, tasker)..."

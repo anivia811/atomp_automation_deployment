@@ -86,11 +86,11 @@ log "Saving images..."
 #   - vendor/STFService, vendor/appium, etc. (real device + Appium support, was missing)
 #   - statistical/report Angular app build
 # Used for ALL device farm services (app, api, websocket, processor, provider, provider-android, etc.)
-save_image "devicefarm"      "devicefarm:b-20260709"
+save_image "devicefarm"      "devicefarm:b-20260716"
 # Base atomid image. The OTP algorithm fix (users.controller.js) and the frontend
 # redirect-loop/cookie fix (public_fixed/) are shipped as separate bind-mounted
 # files below, not baked into this image — see config/atomid/appenv/.
-save_image "atomid"          "atomid/web:b-20260708"
+save_image "atomid"          "atomid/web:b-20260716"
 save_image "mysql-atomid"    "mysql:8.0.34"
 save_image "mysql-df"        "mysql:8.0.24"
 save_image "mysql-auto"      "mysql:8.0.43"
@@ -104,6 +104,12 @@ save_image "studio-web"      "studio-web:node20"
 save_image "tester40-client" "tester40-client:node20"
 save_image "tester40-web"    "tester40-web:node20"
 save_image "tasker-web"      "tasker-web:node22"
+# ~6.7GB (conda + PyTorch CPU + EasyOCR model) — by far the largest image
+# here. Was previously absent from every bundle (never built/saved/started
+# by any script — only ever existed as a one-off manual `docker run`), so any
+# tasker-web/studio-web feature calling http://atomp-ai:8000 silently had
+# nothing to connect to on a fresh machine.
+save_image "atomp-ai"        "atomp-ai:latest"
 
 echo ""
 log "Image total: $(du -sh "$BUNDLE/images" | cut -f1)"
@@ -189,15 +195,82 @@ mkdir -p "$BUNDLE/appium"
 # because it needs direct access to the host's adb/USB stack.
 cp -r "$SCRIPT_DIR/../appium/." "$BUNDLE/appium/" 2>/dev/null || \
   log "  [WARN] Appium source not found at ../appium — skipping (start_all.sh will warn at runtime)"
+
+# Installed drivers (e.g. uiautomator2) live in $APPIUM_HOME (~/.appium by
+# default) — a location OUTSIDE the appium/ project directory copied above,
+# tied to whatever user ran `appium driver install` on the source machine.
+# Copying the project alone reproduced "Could not find a driver for
+# automationName 'UIAutomator2'" on a fresh machine even though appium/
+# itself was fully staged. Ship the actual installed driver files instead of
+# requiring a fresh `driver install` (and npm registry access) on every new
+# machine — start_appium.sh points APPIUM_HOME at this copy directly.
+mkdir -p "$BUNDLE/appium_home"
+cp -r "$HOME/.appium/." "$BUNDLE/appium_home/" 2>/dev/null || \
+  log "  [WARN] ~/.appium not found — uiautomator2 driver will be missing on the target machine"
+
+# extensions.yaml (Appium's driver/plugin manifest) records each driver's
+# installPath as an ABSOLUTE path from wherever it was originally installed
+# (this machine's $HOME/.appium) — copying the files alone doesn't fix this,
+# the manifest still points back at the source machine's literal path, which
+# doesn't exist on a fresh machine. Confirmed by testing: with the files
+# copied as-is, Appium failed with "Could not read the driver manifest at
+# /home/a1/.appium/node_modules/.../package.json: ENOENT" even though the
+# driver files were physically present at the new location. Swap in a
+# placeholder here; start_appium.sh renders it back to the real absolute path
+# at runtime, same __SERVER_IP__-style pattern used elsewhere in this repo.
+MANIFEST="$BUNDLE/appium_home/node_modules/.cache/appium/extensions.yaml"
+if [[ -f "$MANIFEST" ]]; then
+  sed -i "s|$HOME/\.appium|__APPIUM_HOME__|g" "$MANIFEST"
+  ok "extensions.yaml installPath templated for portability"
+fi
+
+# Portable node/npm runtime — confirmed on real hardware (hopium, 2026-07-12)
+# that a "brand new Ubuntu machine" can have NO system Node.js at all, which
+# fails `node packages/appium/index.js` silently (start_all.sh only warns,
+# never hard-fails, on Appium not starting) — the rest of the stack comes up
+# looking fine while nothing ever listens on :4723. Extract node+npm from our
+# own already-built node20 base image so Appium can run with zero host
+# prerequisites beyond Docker itself. start_appium.sh only uses this when no
+# suitable system node is already on PATH.
+NODE_EXTRACT_IMG="node:20-bookworm-slim-atomp"
+if docker image inspect "$NODE_EXTRACT_IMG" >/dev/null 2>&1; then
+  hr; log "Extracting portable node/npm from $NODE_EXTRACT_IMG (Appium fallback runtime)..."
+  mkdir -p "$BUNDLE/appium/.node/bin" "$BUNDLE/appium/.node/lib"
+  CID="$(docker create "$NODE_EXTRACT_IMG")"
+  docker cp "$CID:/usr/local/bin/node" "$BUNDLE/appium/.node/bin/node"
+  docker cp "$CID:/usr/local/lib/node_modules" "$BUNDLE/appium/.node/lib/node_modules"
+  docker rm "$CID" >/dev/null
+  # Write plain wrapper scripts for npm/npx instead of relying on the
+  # image's relative symlinks (`../lib/node_modules/npm/bin/npm-cli.js`) —
+  # confirmed on hopium that `docker cp` doesn't reliably reproduce those,
+  # since the two `docker cp` calls above land bin/ and lib/ separately
+  # rather than as one atomic copy of /usr/local.
+  cat > "$BUNDLE/appium/.node/bin/npm" << 'NPMWRAP'
+#!/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec "$DIR/node" "$DIR/../lib/node_modules/npm/bin/npm-cli.js" "$@"
+NPMWRAP
+  cat > "$BUNDLE/appium/.node/bin/npx" << 'NPXWRAP'
+#!/bin/sh
+DIR="$(cd "$(dirname "$0")" && pwd)"
+exec "$DIR/node" "$DIR/../lib/node_modules/npm/bin/npx-cli.js" "$@"
+NPXWRAP
+  chmod +x "$BUNDLE/appium/.node/bin/node" "$BUNDLE/appium/.node/bin/npm" "$BUNDLE/appium/.node/bin/npx"
+  ok "portable node runtime staged ($(du -sh "$BUNDLE/appium/.node" | cut -f1))"
+else
+  log "  [WARN] $NODE_EXTRACT_IMG not found locally — Appium will require system node on the target machine"
+fi
+
 # Rewrite hardcoded dev-machine paths to be relative to wherever the bundle
 # gets extracted on the new machine.
 sed \
   -e 's|APPIUM_DIR="/home/a1/atomp-2/appium"|APPIUM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)/appium"|' \
   -e 's|LOG_DIR="/home/a1/atomp-2/atomp_automation_deployment/app_data/appium_webserver/logs"|LOG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)/data/appium/logs"|' \
+  -e 's|APPIUM_HOME="/home/a1/.appium"|APPIUM_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" \&\& pwd)/appium_home"|' \
   "$SCRIPT_DIR/start_appium.sh" > "$BUNDLE/start_appium.sh" 2>/dev/null
 chmod +x "$BUNDLE/start_appium.sh" 2>/dev/null
 
-ok "appium done ($(du -sh "$BUNDLE/appium" 2>/dev/null | cut -f1))"
+ok "appium done ($(du -sh "$BUNDLE/appium" 2>/dev/null | cut -f1) + appium_home $(du -sh "$BUNDLE/appium_home" 2>/dev/null | cut -f1))"
 
 # ─── Router nginx config (runs as docker container — no host nginx needed) ────
 hr; log "Copying router nginx config..."
@@ -211,42 +284,9 @@ hr; log "Copying scripts..."
 
 cp "$SCRIPT_DIR/bundle/start_all.sh" "$BUNDLE/start_all.sh"
 cp "$SCRIPT_DIR/bundle/stop_all.sh"  "$BUNDLE/stop_all.sh"
-chmod +x "$BUNDLE/start_all.sh" "$BUNDLE/stop_all.sh"
-
-# Provider run command for README
-PROVIDER_CMD=$(cat << 'PROVIDER'
-# ── Provider (USB devices — run AFTER device farm stack is up) ────────────────
-# Requires: --privileged, USB passthrough, ADB.
-# WSL: USB passthrough requires usbipd-win. Android emulators work without it.
-#
-#   SERVER_IP=<your-server-ip>
-#   docker run -d \
-#     --name provider \
-#     --privileged \
-#     --network host \
-#     -v "$(pwd)/config/df/kconfig:/config" \
-#     -v /dev/bus/usb:/dev/bus/usb \
-#     devicefarm:bundle-20260702 \
-#     stf provider-linux \
-#       --name "local" \
-#       --location "local" \
-#       --connect-sub "tcp://$SERVER_IP:7250" \
-#       --connect-push "tcp://$SERVER_IP:7270" \
-#       --storage-url "http://$SERVER_IP:3500" \
-#       --storage-permanent-url "http://$SERVER_IP:4200" \
-#       --provider-storage-url "http://$SERVER_IP:3500/storage/upload" \
-#       --min-port 11000 --max-port 12000 \
-#       --heartbeat-interval 10000 \
-#       --screen-ws-url-pattern "ws://$SERVER_IP:8180/d/local/<%= serial %>/<%= publicPort %>/" \
-#       --stream-gate-client-pattern "ws://$SERVER_IP:8180/c" \
-#       --stream-gate-device-pattern "ws://$SERVER_IP:8180/dv" \
-#       --using-stream-gate true \
-#       --using-appium false \
-#       --screen-jpeg-quality 80 \
-#       --fps 10 \
-#       --device-farm-service-token "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiREYiLCJhbGxvd19zZXJ2aWNlIjpbIlRNIiwiVGVzdGVyNDAiLCJBVE9NSUQiLCJTdG9yYWdlIl19LCJpYXQiOjE1OTYwOTE3MzN9.fx-Jb-4mo8V6LkYN39t16za3xmWruIndzZcfinDXGIcPIE71okALCl1x2gikv8nJMWJGwSug68vFgrDVW5n_yjI60Mq-qO3rpT8vxVvCEjgAKtMWyXFn_erRufoLJE0RNNVWmUzQWhelbJoA2OLcOLckBUY8W1igu-Mf7b3tFgc"
-PROVIDER
-)
+cp "$SCRIPT_DIR/bundle/install_prereqs.sh" "$BUNDLE/install_prereqs.sh"
+cp "$SCRIPT_DIR/bundle/99-atomp-android.rules" "$BUNDLE/99-atomp-android.rules"
+chmod +x "$BUNDLE/start_all.sh" "$BUNDLE/stop_all.sh" "$BUNDLE/install_prereqs.sh"
 
 # ─── README ────────────────────────────────────────────────────────────────────
 cat > "$BUNDLE/README.md" << README
@@ -255,14 +295,21 @@ cat > "$BUNDLE/README.md" << README
 ## Requirements
 - Linux or WSL2 (Ubuntu 20.04+)
 - Docker Engine 20.10+ and docker compose v2
-- nginx (on host, for the /atomid /tester40 /studio /storage routing)
 - ~30 GB free disk space (images + data)
+- Node.js is NOT required on the host — Appium ships its own portable
+  node/npm runtime (\`appium/.node/\`) and uses it automatically whenever no
+  system node satisfying \`^20.19\` is already on PATH.
 
 ## Quick start
 
 \`\`\`bash
 tar xzf atomp-bundle.tar.gz
 cd atomp-bundle
+
+# One-time, only if you'll use real USB Android devices (not needed for
+# emulator-only use). Must run BEFORE connecting a device.
+sudo bash install_prereqs.sh
+
 bash start_all.sh          # prompts for server IP
 # or
 bash start_all.sh 192.168.1.100
@@ -275,7 +322,13 @@ The script will:
 4. Start device farm (rethinkdb + redis + mysql + all STF services + nginx on :8180)
 5. Start shared mysql-auto + redis-auto
 6. Start tester40, studio, storage, tasker
-7. Install and reload the host nginx config
+7. Install and reload the host nginx config — this is what actually serves Device
+   Farm at \`/devicefarm/\` on port 80 (see below); the dedicated :8180 origin
+   still runs too but LAN policies on some networks block non-standard ports
+8. Start Appium (real device automation), using the uiautomator2 driver
+   already bundled in appium_home/ and, if no suitable system node is found,
+   the portable node runtime bundled in appium/.node/ — no network access
+   or host Node.js install needed for any of this
 
 ## Stopping all services
 
@@ -293,14 +346,40 @@ docker exec -i atomid-mysql mysql -u root -proot atomid < config/atomid/atomid.s
 
 ## Provider (USB Android devices)
 
-$PROVIDER_CMD
+Both \`provider\` (emulators) and \`provider-android\` (real ADB-connected phones)
+are already defined in \`config/df/docker-compose.yaml\` (privileged, host
+network, \`/dev/bus/usb\` mounted) and start automatically with the rest of the
+device farm stack in step 4 above — there is no manual \`docker run\` step.
+
+If a physically connected device doesn't show up in Device Farm:
+1. Make sure \`sudo bash install_prereqs.sh\` was run (installs udev rules for
+   Android USB vendor IDs — without it, Linux denies device access with
+   "no permissions ... not in the plugdev group", regardless of Docker).
+2. Check the OS/ADB sees it at all: \`adb devices\` should show it as \`device\`,
+   not \`unauthorized\` or missing. Enable USB debugging in Developer Options
+   and accept the "Allow USB debugging?" prompt on the device's own screen —
+   this is a one-time physical step no script can do for you.
+3. **adb runs inside the \`provider-android\` container (user \`stf\`), not on
+   the host** — host-side \`adb kill-server\`/\`start-server\` just re-attaches
+   to the container's already-running server, it doesn't restart anything.
+   Use \`docker logs provider-android\` and \`docker exec provider-android adb
+   devices\`, not the host's own adb, when diagnosing.
+4. If \`adb devices\` shows \`no permissions\` even after step 1: many Android
+   phones also expose a PTP/MTP camera interface, which makes
+   \`/usr/lib/udev/rules.d/60-libgphoto2-6.rules\` match the same device and
+   reset it back to mode 0664 — silently undoing a lower-priority rule.
+   \`install_prereqs.sh\` installs at priority \`99\` specifically to run after
+   that and win; if a permission issue persists, confirm with
+   \`ls -l /dev/bus/usb/*/*\` that the device is actually \`crw-rw-rw-\`, and
+   check for any other \`/etc/udev/rules.d/\` or \`/usr/lib/udev/rules.d/\` file
+   for that vendor ID sorting after \`99-atomp-android.rules\`.
 
 ## Service URLs (replace <IP> with your server IP)
 
 | Service      | URL                                  |
 |-------------|--------------------------------------|
 | Atomid       | http://<IP>/atomid/                 |
-| Device Farm  | http://<IP>:8180/devicefarm/        |
+| Device Farm  | http://<IP>/devicefarm/             |
 | Tester40     | http://<IP>/tester40                |
 | Studio       | http://<IP>/studio                  |
 | Storage      | http://<IP>/storage                 |
@@ -316,21 +395,22 @@ $PROVIDER_CMD
 
 | File | Image | Used by |
 |------|-------|---------|
-| devicefarm.tar.gz | devicefarm:bundle-20260702 | ALL device farm services (patched) |
-| atomid.tar.gz | atomid/web:bundle-20260702 | atomid (patched) |
+| devicefarm.tar.gz | $(cat "$BUNDLE/images/devicefarm.ref" 2>/dev/null || echo "devicefarm:b-YYYYMMDD") | ALL device farm services (patched) |
+| atomid.tar.gz | $(cat "$BUNDLE/images/atomid.ref" 2>/dev/null || echo "atomid/web:b-YYYYMMDD") | atomid (patched) |
 | mysql-atomid.tar.gz | mysql:8.0.34 | atomid-mysql |
 | mysql-df.tar.gz | mysql:8.0.24 | df mysql |
 | mysql-auto.tar.gz | mysql:8.0.43 | mysql-auto |
 | redis-atomid.tar.gz | redis:8.6.1 | atomid-redis |
 | redis.tar.gz | redis:8.2.2 | df redis, redis-auto |
 | rethinkdb.tar.gz | rethinkdb:latest | rethinkdb |
-| nginx-alpine.tar.gz | nginx:stable-alpine | df-nginx |
+| nginx-alpine.tar.gz | nginx:stable-alpine | df-nginx, host-router |
 | tester40-web.tar.gz | tester40-web:node20 | tester40-web |
 | tester40-client.tar.gz | tester40-client:node20 | tester40-client |
 | tasker-web.tar.gz | tasker-web:node22 | tasker-web |
 | studio-web.tar.gz | studio-web:node20 | studio-web |
 | studio-client.tar.gz | studio-client:node20 | studio-client |
 | storage-web.tar.gz | storage-web:node20 | storage-web |
+| atomp-ai.tar.gz | atomp-ai:latest | tasker-web, studio-web (OCR/image-similarity, ~6.7GB — by far the largest image) |
 
 ## Config fixes in this bundle
 
@@ -354,6 +434,25 @@ $PROVIDER_CMD
    debug statements in \`ServiceInterceptor\`, \`CanActivatePageService\`, \`LoginComponent\`,
    \`DefaultLayoutComponent\`, and \`CommonService\` printed the raw auth token and decoded
    SSO payloads to the browser console on every request/navigation
+
+## Patches baked into devicefarm:b-20260716 (2026-07-16)
+
+1. **Settings/Control/Devices/Groups redirect-to-atomid-homepage fix** —
+   \`res/app/menu/menu.pug\` and \`res/app/components/stf/common-ui/help-icon/help-icon.pug\`
+   used absolute-path hashbang links (\`ng-href="/#!/settings"\`). That only worked on
+   Device Farm's old dedicated \`:8180\` origin, where \`/\` was its own root — under the
+   shared \`host-router\` (port 80) used by this bundle, \`/\` unconditionally 302s to
+   \`/atomid/\`, so every nav click bounced the user out of Device Farm entirely. Fixed
+   by making the links path-relative (\`#!/settings\`, no leading \`/\`). Also hardened three
+   unrelated \`\$window.location = '/'\` fallbacks (401 interceptor, logout, idle-session
+   timeout in \`app.js\`/\`menu-controller.js\`/\`idle-session-service.js\`) to target
+   \`/devicefarm/\` instead, so they can't regress the same way.
+2. **Redis v3→v4 API fix** — legacy \`redis.setAsync/getAsync/delAsync/ttlAsync\` calls
+   (node-redis v3 callback style) against a v4 client silently failed; rewritten to the
+   v4 API (\`redis.set/get/del/ttl\`).
+3. **\`node-fetch\` ESM require fix** — \`require('node-fetch')\` crashed the \`api\` container
+   on every logout (node-fetch v3 is ESM-only); switched to dynamic import, wrapped in
+   try/catch.
 README
 
 ok "README written"

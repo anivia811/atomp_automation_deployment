@@ -19,13 +19,17 @@ export STORAGE_PERMANENT_VOLUME="/data/atomp_df_volumes/storage-permanent"
 export BUILD_ENV="dev"
 export SECURED=""
 export SECRET_KEY="atom@nuclear!"
-export DEVICEFARM_IMAGE="devicefarm:b-20260709"
-export DOMAIN="10.42.0.245" #Need change 1 (your web server domain or ip. eg: localhost, 192.168.1.1, domain.com)
-export ATOMID_URL="http://10.42.0.245/atomid" #Need change 2 (your atomid server. eg: http://localhost:8081)
+export DEVICEFARM_IMAGE="devicefarm:b-20260716"
+export DOMAIN="10.193.9.71" #Need change 1 (your web server domain or ip. eg: localhost, 192.168.1.1, domain.com)
+export ATOMID_URL="http://10.193.9.71/atomid" #Need change 2 (your atomid server. eg: http://localhost:8081)
 export EXTERNAL_STORAGE_URL="http://$DOMAIN/storage/upload/tmp" #Need change 3
 
 # path that external client use to connect APPLICATION
-export WEB_APP_URL="http://$DOMAIN:8180/devicefarm/"
+# Routed through the shared host-router on port 80 (not the dedicated
+# :8180 df-nginx port) — many LAN/corporate networks block non-standard
+# ports like 8180 while allowing 80, and host-router already proxies
+# /devicefarm/* to the same backends df-nginx does.
+export WEB_APP_URL="http://$DOMAIN/devicefarm/"
 # call from client
 export WEB_APP_AUTH_URL="$ATOMID_URL/login?callback=$WEB_APP_URL"
 # call from server (app, api, ...)

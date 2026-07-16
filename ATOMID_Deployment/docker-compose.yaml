@@ -33,7 +33,7 @@ services:
       atomid:
         ipv4_address: ${DOCKER_NET_IP_REDIS}
   atomid:
-    image: atomid/web:b-20260715
+    image: atomid/web:b-20260716
     container_name: atomid
     networks:
       atomid:

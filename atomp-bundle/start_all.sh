@@ -49,8 +49,8 @@ load_image() {
   ok "$tag loaded"
 }
 
-load_image "devicefarm"      "devicefarm:b-20260709"
-load_image "atomid"          "atomid/web:b-20260708"
+load_image "devicefarm"      "devicefarm:b-20260716"
+load_image "atomid"          "atomid/web:b-20260716"
 load_image "mysql-atomid"    "mysql:8.0.34"
 load_image "mysql-df"        "mysql:8.0.24"
 load_image "mysql-auto"      "mysql:8.0.43"
@@ -64,6 +64,7 @@ load_image "studio-web"      "studio-web:node20"
 load_image "tester40-client" "tester40-client:node20"
 load_image "tester40-web"    "tester40-web:node20"
 load_image "tasker-web"      "tasker-web:node22"
+load_image "atomp-ai"        "atomp-ai:latest"
 
 # ─── 3. Docker networks ───────────────────────────────────────────────────────
 hr; log "Ensuring docker networks exist..."
@@ -178,10 +179,18 @@ if docker network inspect deploy_master_default >/dev/null 2>&1; then
   fi
 fi
 
+# NOTE: previously `--no-recreate`, which told Compose to leave every
+# container alone even when DEVICEFARM_IMAGE points at a freshly-built tag —
+# so a nightly no-cache rebuild silently never got deployed here. Plain
+# `up -d` lets Compose's own per-service config diff do the right thing
+# instead: rethinkdb/redis/mysql (fixed image tags, unchanged) are left
+# running untouched, while migrate/migrate-mysql/api/app/etc. (all
+# ${DEVICEFARM_IMAGE}) get recreated whenever that tag changes. migrate is
+# safe to re-run (idempotent, already has its own ready-wait retry loop).
 docker compose \
   -f "$DF_CFG/docker-compose.yaml" \
   -p deploy_master \
-  up -d --no-recreate
+  up -d
 
 ok "device farm stack started (provider excluded — see README)"
 
@@ -327,6 +336,28 @@ if [[ ! -f "$MARKER" ]]; then
   fi
   touch "$MARKER"
 fi
+
+# ─── 7b. atomp-ai ──────────────────────────────────────────────────────────────
+# OCR/image-similarity backend that tasker-web/studio-web call over HTTP at
+# http://atomp-ai:8000 (TASKER_AI_HOST/STUDIO_AI_HOST below). Previously
+# absent from this script entirely — it only ever existed as a one-off manual
+# `docker run` on the original dev machine, so a fresh machine had nothing
+# listening at that address and any OCR/image-similarity feature silently
+# failed with connection-refused while everything else looked fine. No
+# per-machine templating needed (no SERVER_IP/host-specific config in the
+# app itself) — started before the app services that depend on it.
+hr; log "Starting atomp-ai..."
+
+start_container atomp-ai \
+  --name atomp-ai \
+  --network atomp_automation_network \
+  --restart unless-stopped \
+  -e LANG=C.UTF-8 \
+  -e LC_ALL=C.UTF-8 \
+  -e TOKEN="Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiVGFza2VyIiwiYWxsb3dfc2VydmljZSI6WyJUZXN0ZXI0MCIsIkFUT01JRCIsIlN0b3JhZ2UiXX0sImlhdCI6MTU5NjA5MTczM30.llG3I1zTuuhtFDcLt-vaU0cXJT5V38SYdJLKGfziKXpaEJU0QBvhYn_FLYQV4fDy2Nm9kj5ziHFV1TKQOWcq2wzwGxBg4JOi-ZrwBXzRoFGWEAWwPc8i4FnygO9M58lFtrAZHRkNa5L3Wdkt37iS1QYJPmGJiW61pOYAK6abgv8" \
+  atomp-ai:latest
+
+ok "atomp-ai ready"
 
 # ─── 8. App services ──────────────────────────────────────────────────────────
 hr; log "Starting app services (tester40, studio, storage, tasker)..."

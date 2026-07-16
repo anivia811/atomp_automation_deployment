@@ -150,6 +150,28 @@ export STORAGE_PERMANENT_VOLUME="$DF_DATA/storage-permanent"
 # do NOT hardcode/override it here, that's what caused it to silently drift
 # to a stale tag before.
 
+# The device-farm units run as the `stf` user baked into the image, not as
+# whoever runs this script, so every bind-mounted data dir must be writable by
+# that uid. mkdir -p above creates them owned by the current user, which leaves
+# the image's uid on the "other" bits: the first upload (a screenshot, say) then
+# fails with EACCES, and since storage-temp never handles the write stream's
+# 'error' event that kills the whole process — port 3500 disappears, the device
+# worker hits ECONNREFUSED, dies, and the session drops. Only these two dirs
+# need it; the rethinkdb/redis/mysql images fix up their own data dir on boot.
+# Ask for `stf` by name rather than `id -u`: the latter reports whatever the
+# image's USER directive says, which is root on images rebuilt without it, and
+# the units still drop to stf at runtime.
+DF_IMAGE_UID="$(docker run --rm --entrypoint id "$DEVICEFARM_IMAGE" -u stf 2>/dev/null || true)"
+[[ -n "$DF_IMAGE_UID" ]] || DF_IMAGE_UID=998
+if command -v setfacl >/dev/null 2>&1; then
+  setfacl -R -m    "u:$DF_IMAGE_UID:rwx" "$DF_DATA/storage" "$DF_DATA/storage-permanent"
+  setfacl -R -d -m "u:$DF_IMAGE_UID:rwx" "$DF_DATA/storage" "$DF_DATA/storage-permanent"
+else
+  # No acl tooling on this host: these dirs only ever hold uploaded blobs.
+  chmod -R 0777 "$DF_DATA/storage" "$DF_DATA/storage-permanent"
+fi
+ok "df storage dirs writable by image uid $DF_IMAGE_UID"
+
 # Render DF docker-compose if it's a template
 if [[ -f "$DF_CFG/docker-compose.yaml.tmpl" ]]; then
   sed "s/__SERVER_IP__/$SERVER_IP/g" "$DF_CFG/docker-compose.yaml.tmpl" \
@@ -409,6 +431,7 @@ recreate_container tester40-web \
   -e TESTER40_COOKIE_SAME_SITE= \
   -e TESTER40_INTERNAL_PORT=3000 \
   -e TESTER40_INTERNAL_SOCKET_PORT=3030 \
+  -e TESTER40_TTL_SECONDS=3600 \
   -e TESTER40_SERVICE_TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiVGVzdGVyNDAiLCJhbGxvd19zZXJ2aWNlIjpbIkRGIiwiVGFza2VyIiwiQVRPTUlEIiwiU3RvcmFnZSIsIlN0dWRpbyJdfSwiaWF0IjoxNTk2MDkyNTM1fQ.YmzjH_vl-oWdeeqB-L5U7XuqDkdcbmCF4zNZ6JonAy0AYwNitT1Huk9O0V79t6-YyULsJSlkcOadELWJl-S_UEjDWRDJg61DM59oe6qZfjVJfihpnVA_IYcQUsaze6CIVEu9IhXqhIinDFBfXCNjyYZiJiSM3_rnbXdAYVTnI0s" \
   -e NODE_ENV=production \
   --restart unless-stopped \
@@ -487,6 +510,7 @@ recreate_container studio-web \
   -e STUDIO_PIPE_URL='[{"from":"","to":""}]' \
   -e STUDIO_GLOBAL_AGENT_OPTIONS='{"rejectUnauthorized":false}' \
   -e STUDIO_ALLOW_STORAGE_HOST="[]" \
+  -e STUDIO_TTL_SECONDS=3600 \
   -e STUDIO_APPIUM_HOST="$SERVER_IP" \
   -e STUDIO_APPIUM_PORT=4723 \
   -e STUDIO_APPIUM_PROXY_HOST="" \

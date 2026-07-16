@@ -4,6 +4,10 @@
 docker_images/*
 build_image/*
 
+# Secrets: .env holds the admin password, the API private key and the FPT/HAE
+# auth credentials. Deployment values, never source.
+.env
+
 # MySQL / data volumes
 **/mysql-volume/
 app_data/
@@ -11,6 +15,8 @@ atomp-bundle/
 atomp-bundle.tar.gz
 tester40-client.tar.gz
 atomp-fixes/
+data/
+backups/
 
 # Heavy image archives
 initial_app_data_folder.zip

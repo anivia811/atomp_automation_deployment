@@ -80,5 +80,8 @@
   "limited_of_days_inactivity": 90,
   "schedule_time": "0 0 17 * * *",
   "time_zone": "UTC",
-  "globalAgentOptions": { "rejectUnauthorized": false }
+  "globalAgentOptions": { "rejectUnauthorized": false },
+  "session": {
+    "ttlSeconds": 600
+  }
 }

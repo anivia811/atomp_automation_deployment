@@ -37,7 +37,7 @@ services:
     restart: unless-stopped
 
   atomid:
-    image: atomid/web:b-20260708
+    image: atomid/web:b-20260715
     container_name: atomid
     networks:
       atomid:
@@ -55,8 +55,6 @@ services:
       - ${ATOMID_APPENV}/service-privatekey.pem:/config/service-privatekey.pem
       - ${ATOMID_APPENV}/service-publickey.pem:/config/service-publickey.pem
       - ${ATOMID_UPLOADS}:/app/public/uploads
-      # 2FA/OTP sha512 mismatch fix
-      - ${ATOMID_APPENV}/users.controller.js:/app/app/api/users/users.controller.js
       # Fixed frontend: correct devicefarm/tester40 links + no .atomp.io cookie domain
       - ${ATOMID_APPENV}/public_fixed:/app/public
     environment:

@@ -65,12 +65,12 @@
     "tm"
   ],
   "tester40": {
-    "host": "http://10.42.0.245/tester40",
-    "api": "http://10.42.0.245/tester40/api"
+    "host": "http://10.193.9.71/tester40",
+    "api": "http://10.193.9.71/tester40/api"
   },
   "devicefarm": {
-    "host": "http://10.42.0.245:8180/devicefarm",
-    "api": "http://10.42.0.245:8180/devicefarm/api/v1"
+    "host": "http://10.193.9.71:8180/devicefarm",
+    "api": "http://10.193.9.71:8180/devicefarm/api/v1"
   },
   "serviceToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2Vfa2V5IjoiQVRPTUlEIiwiYWxsb3dfc2VydmljZSI6WyJUdW5uZWxfU2VydmVyIl19LCJpYXQiOjE2MTg1NDA5OTh9.TMgoHOkgJIUbw9QInBgqIUzmZPQa5pZpN8LuBJ4OEbS30nd_dbs_5DCDcHYQV9eoyAtC4q6sgAnebJ8tQ0RqLVCl74LUJ947uGdHeW1zgvfNlXx6zjA0q_Hke_2ld0f_H_olCn11Dt22IKNUawH7rFDMTKP8wgVpJhnq3JKKPcI",
   "tunnelServerUrl": "",
@@ -80,5 +80,8 @@
   "limited_of_days_inactivity": 90,
   "schedule_time": "0 0 17 * * *",
   "time_zone": "UTC",
-  "globalAgentOptions": { "rejectUnauthorized": false }
+  "globalAgentOptions": { "rejectUnauthorized": false },
+  "session": {
+    "ttlSeconds": 600
+  }
 }

@@ -33,7 +33,7 @@ services:
       atomid:
         ipv4_address: ${DOCKER_NET_IP_REDIS}
   atomid:
-    image: atomid/web:b-20260708
+    image: atomid/web:b-20260715
     container_name: atomid
     networks:
       atomid:
@@ -52,7 +52,6 @@ services:
       - ./script/deploy/appenv/service-publickey.pem:/config/service-publickey.pem
       - ./script/deploy/appenv/public_fixed:/app/public
       - ./uploads:/app/public/uploads
-      - ./script/deploy/appenv/users.controller.js:/app/app/api/users/users.controller.js
       # - ./script/deploy/appenv/server.js:/app/server.js
       # - ./script/deploy/appenv/invitations.controller.js:/app/app/api/invitations/invitations.controller.js
     environment:

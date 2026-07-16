@@ -79,6 +79,7 @@ services:
   api:
     image: ${DEVICEFARM_IMAGE}
     container_name: api
+    restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -113,6 +114,7 @@ services:
   app:
     image: ${DEVICEFARM_IMAGE}
     container_name: app
+    restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -139,6 +141,7 @@ services:
   groups-engine:
     image: ${DEVICEFARM_IMAGE}
     container_name: groups-engine
+    restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -176,6 +179,7 @@ services:
   reaper:
     image: ${DEVICEFARM_IMAGE}
     container_name: reaper
+    restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -189,6 +193,7 @@ services:
   report:
     image: ${DEVICEFARM_IMAGE}
     container_name: report
+    restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -204,6 +209,7 @@ services:
   schedule-job:
     image: ${DEVICEFARM_IMAGE}
     container_name: schedule-job
+    restart: unless-stopped
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -223,6 +229,7 @@ services:
   storage-temp:
     image: ${DEVICEFARM_IMAGE}
     container_name: storage-temp
+    restart: unless-stopped
     volumes:
       - ${STORAGE_VOLUME}:/data
     ports:
@@ -239,6 +246,7 @@ services:
   storage-permanent:
     image: ${DEVICEFARM_IMAGE}
     container_name: storage-permanent
+    restart: unless-stopped
     volumes:
       - ${STORAGE_PERMANENT_VOLUME}:/data
     environment:
@@ -255,6 +263,7 @@ services:
   storage-plugin-image:
     image: ${DEVICEFARM_IMAGE}
     container_name: storage-plugin-image
+    restart: unless-stopped
     depends_on:
       - storage-temp
     ports:
@@ -266,6 +275,7 @@ services:
   storage-plugin-apk:
     image: ${DEVICEFARM_IMAGE}
     container_name: storage-plugin-apk
+    restart: unless-stopped
     depends_on:
       - storage-temp
     volumes:
@@ -280,6 +290,7 @@ services:
   storage-plugin-ipa:
     image: ${DEVICEFARM_IMAGE}
     container_name: storage-plugin-ipa
+    restart: unless-stopped
     depends_on:
       - storage-temp
     volumes:
@@ -294,6 +305,7 @@ services:
   stream-gate:
     image: ${DEVICEFARM_IMAGE}
     container_name: stream-gate
+    restart: unless-stopped
     ports:
       - "3900:3000"
       - "7280:7280"
@@ -304,6 +316,7 @@ services:
   stream-gate-audio:
     image: ${DEVICEFARM_IMAGE}
     container_name: stream-gate-audio
+    restart: unless-stopped
     ports:
       - "4100:3000"
       - "7290:7290"
@@ -314,6 +327,7 @@ services:
   triproxy-app:
     image: ${DEVICEFARM_IMAGE}
     container_name: triproxy-app
+    restart: unless-stopped
     ports:
       - "7150:7150"
       - "7160:7160"
@@ -326,6 +340,7 @@ services:
   triproxy-dev:
     image: ${DEVICEFARM_IMAGE}
     container_name: triproxy-dev
+    restart: unless-stopped
     ports:
       - "7250:7250"
       - "7260:7260"
@@ -372,17 +387,18 @@ services:
       stf provider-linux
       --name "local-245"
       --location "local"
-      --connect-sub tcp://10.42.0.245:7250
-      --connect-push tcp://10.42.0.245:7270
-      --storage-url http://10.42.0.245:3500
-      --storage-permanent-url http://10.42.0.245:4200
-      --provider-storage-url http://10.42.0.245:3500/storage/upload
+      --local-ip "10.193.9.71"
+      --connect-sub tcp://10.193.9.71:7250
+      --connect-push tcp://10.193.9.71:7270
+      --storage-url http://10.193.9.71:3500
+      --storage-permanent-url http://10.193.9.71:4200
+      --provider-storage-url http://10.193.9.71:3500/storage/upload
       --min-port 11000
       --max-port 12000
       --heartbeat-interval 10000
-      --screen-ws-url-pattern "ws://10.42.0.245:8180/d/local/<%= serial %>/<%= publicPort %>/"
-      --stream-gate-client-pattern "ws://10.42.0.245:8180/c"
-      --stream-gate-device-pattern "ws://10.42.0.245:8180/dv"
+      --screen-ws-url-pattern "ws://10.193.9.71:8180/d/local/<%= serial %>/<%= publicPort %>/"
+      --stream-gate-client-pattern "ws://10.193.9.71:8180/c"
+      --stream-gate-device-pattern "ws://10.193.9.71:8180/dv"
       --using-stream-gate true
       --using-appium false
       --appium-config ""
@@ -419,9 +435,9 @@ services:
       --max-port 13000
       --heartbeat-interval 10000
       --screen-ws-url-pattern "ws://${DOMAIN}:8180/d/androidlocal/<%= serial %>/<%= publicPort %>/"
-      --stream-gate-client-pattern "ws://${DOMAIN}:8180/c"
+      --stream-gate-client-pattern "ws://${DOMAIN}/devicefarm/c"
       --stream-gate-device-pattern "ws://${DOMAIN}:8180/dv"
-      --stream-gate-audio-client-pattern "ws://${DOMAIN}:8180/c-audio"
+      --stream-gate-audio-client-pattern "ws://${DOMAIN}/devicefarm/c-audio"
       --stream-gate-audio-device-pattern "ws://${DOMAIN}:8180/dv-audio"
       --using-stream-gate true
       --using-appium true

@@ -374,6 +374,17 @@ services:
       --connect-sub tcp://triproxy-app:7150 
       --connect-push tcp://triproxy-app:7170
       --private-key-path "/config/client-privatekey.pem"
+  # provider-linux has no --local-ip pinned (unlike provider-android below),
+  # so it falls back to `my-local-ip`'s auto-detection -- which returns a
+  # different result across restarts on a multi-interface host, changing the
+  # mac_address this provider registers under every time (getMacAddress()
+  # looks up the mac of whichever interface has options.localIp bound).
+  # Every manually-added Host Unit device is owned by mac+type in the
+  # `providers` table, so each restart orphans previously-known devices —
+  # the redetector never learns about them because it only reconnects to
+  # devices already present in *this session's* provider.devices array.
+  # Pin --local-ip so the mac_address stays stable across restarts, same as
+  # provider-android already does.
   provider:
     image: ${DEVICEFARM_IMAGE}
     container_name: provider
@@ -387,6 +398,7 @@ services:
       stf provider-linux
       --name "local-245"
       --location "local"
+      --local-ip "${DOMAIN}"
       --connect-sub tcp://10.42.0.245:7250
       --connect-push tcp://10.42.0.245:7270
       --storage-url http://10.42.0.245:3500
